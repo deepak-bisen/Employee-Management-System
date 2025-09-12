@@ -1,4 +1,5 @@
-﻿Employee Management System
+﻿#Employee Management System
+ 
 📝 Overview
 This is a full-stack web application designed to manage employee records. It provides a clean, user-friendly interface for performing CRUD (Create, Read, Update, Delete) operations. The backend is built with Java and Spring Boot, serving a REST API, while the frontend is a responsive single-page application built with plain HTML, CSS, and JavaScript, styled with Tailwind CSS.
 
