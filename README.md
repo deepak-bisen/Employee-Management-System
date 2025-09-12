@@ -59,7 +59,8 @@ mvn spring-boot:run
 
       * The backend server will start on http://localhost:8080. The tables in the database will be created automatically.
 
-Frontend Setup
+Frontend Setup  
+
          1. Place the Files
          * Ensure index.html, style.css, and script.js are all in the same folder.
          2. Launch the UI
