@@ -67,25 +67,16 @@ Frontend Setup
 
 📖 API Endpoints Reference
 The backend exposes the following REST API endpoints:
-Method
-	Endpoint
-	Description
-	GET
-	/api/employees
-	Retrieve all employees
-	GET
-	/api/employees/{id}
-	Retrieve a single employee by ID
-	POST
-	/api/employees
-	Create a new employee
-	PUT
-	/api/employees/{id}
-	Update an existing employee
-	DELETE
-	/api/employees/{id}
-	Delete an employee
-	Example POST/PUT Body:
+----------------------------------------------------------------------------
+Method              Endpoint                   Description
+----------------------------------------------------------------------------
+GET               /api/employees           Retrieve all employees
+GET               /api/employees/{id}      Retrieve a single employee by ID
+POST              /api/employees           Create a new employee
+PUT              /api/employees/{id}       Update an existing employee
+DELETE           /api/employees/{id}       Delete an employee
+----------------------------------------------------------------------------
+Example POST/PUT Body:
 {
    "firstName": "Rohan",
    "lastName": "Kumar",
