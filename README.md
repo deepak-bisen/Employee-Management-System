@@ -50,7 +50,7 @@ Ensure you have the following software installed:
 
 Backend Setup
 1. Clone the Repository
-git clone [https://your-repository-url.git](https://your-repository-url.git)
+git clone [[https://your-repository-url.git](https://github.com/deepak-bisen/Employee-Management-System.git)]
 cd your-project-directory
 
 (If you don't use Git, simply place all the Java project files in a single folder.)
