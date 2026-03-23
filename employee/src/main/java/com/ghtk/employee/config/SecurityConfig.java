@@ -41,6 +41,10 @@ public class SecurityConfig {
                         // Allow authenticated users (Admin & Employee) to view the list
                         .requestMatchers(HttpMethod.GET, "/api/employees/**").authenticated()
 
+                        //register user rules
+                        .requestMatchers("/api/auth/register").permitAll() // ADD THIS LINE
+                        .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
+
                         // Leave Management Rules
                         .requestMatchers(HttpMethod.POST, "/api/leaves/**").authenticated() // Employees can apply
                         .requestMatchers(HttpMethod.PUT, "/api/leaves/**").hasRole("ADMIN") // Only Admins approve/reject
