@@ -3,91 +3,498 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>EMS - Enhanced Dashboard</title>
+    <title>EMS Pro - Dashboard</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        body { font-family: 'Inter', sans-serif; }
+        .content-section { display: none; }
+        .content-section.active { display: block; }
+    </style>
 </head>
-<body class="bg-gray-50 flex">
+<body class="bg-gray-50 min-h-screen">
 
-    <!-- Sidebar -->
-    <aside class="w-64 bg-indigo-900 text-white min-h-screen p-4 hidden md:block">
-        <h1 class="text-2xl font-bold mb-8 flex items-center">
-            <i class="fas fa-users-cog mr-2"></i> EMS Pro
-        </h1>
-        <nav class="space-y-2">
-            <a href="#" class="block p-3 bg-indigo-800 rounded transition"><i class="fas fa-chart-line mr-2"></i> Dashboard</a>
-            <a href="#" class="block p-3 hover:bg-indigo-700 rounded transition"><i class="fas fa-user-friends mr-2"></i> Employees</a>
-            <a href="#" class="block p-3 hover:bg-indigo-700 rounded transition"><i class="fas fa-calendar-check mr-2"></i> Leave Requests</a>
-            <a href="#" class="block p-3 hover:bg-indigo-700 rounded transition"><i class="fas fa-file-invoice-dollar mr-2"></i> Payroll</a>
-        </nav>
-    </aside>
+    <!-- LOGIN PAGE VIEW -->
+    <div id="login-view" class="bg-indigo-900 min-h-screen flex items-center justify-center p-6">
+        <div class="bg-white w-full max-w-md rounded-2xl shadow-2xl overflow-hidden">
+            <div class="p-8">
+                <div class="text-center mb-10">
+                    <div class="inline-flex items-center justify-center w-16 h-16 bg-indigo-100 text-indigo-600 rounded-full mb-4">
+                        <i class="fas fa-lock text-2xl"></i>
+                    </div>
+                    <h1 class="text-3xl font-bold text-gray-800">Welcome Back</h1>
+                    <p class="text-gray-500 mt-2">Employee Management System</p>
+                </div>
 
-    <!-- Main Content -->
-    <main class="flex-1 p-8">
-        <!-- Top Nav -->
-        <header class="flex justify-between items-center mb-8">
-            <h2 class="text-2xl font-semibold text-gray-800">Admin Overview</h2>
-            <div class="flex items-center space-x-4">
-                <span class="text-gray-600 font-medium">Welcome, Admin</span>
-                <button class="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition">Logout</button>
-            </div>
-        </header>
+                <form id="loginForm" class="space-y-6">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Username</label>
+                        <div class="relative">
+                            <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-gray-400">
+                                <i class="fas fa-user"></i>
+                            </span>
+                            <input type="text" id="username" required
+                                class="block w-full pl-10 pr-3 py-3 border border-gray-300 rounded-lg focus:ring-indigo-500 focus:border-indigo-500 text-sm"
+                                placeholder="Enter your username">
+                        </div>
+                    </div>
 
-        <!-- Stats Grid -->
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-            <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
-                <div class="text-indigo-600 text-3xl mb-2"><i class="fas fa-users"></i></div>
-                <div class="text-gray-500 text-sm uppercase">Total Employees</div>
-                <div class="text-3xl font-bold">124</div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Password</label>
+                        <div class="relative">
+                            <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-gray-400">
+                                <i class="fas fa-key"></i>
+                            </span>
+                            <input type="password" id="password" required
+                                class="block w-full pl-10 pr-3 py-3 border border-gray-300 rounded-lg focus:ring-indigo-500 focus:border-indigo-500 text-sm"
+                                placeholder="••••••••">
+                        </div>
+                    </div>
+
+                    <div id="errorMessage" class="hidden text-red-500 text-sm bg-red-50/50 p-3 rounded-lg border border-red-100 text-center">
+                        Invalid username or password
+                    </div>
+
+                    <button type="submit" 
+                        class="w-full bg-indigo-600 text-white py-3 rounded-lg font-semibold hover:bg-indigo-700 transition duration-200 shadow-lg shadow-indigo-200">
+                        Sign In
+                    </button>
+                </form>
             </div>
-            <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
-                <div class="text-orange-500 text-3xl mb-2"><i class="fas fa-clock"></i></div>
-                <div class="text-gray-500 text-sm uppercase">Pending Leaves</div>
-                <div class="text-3xl font-bold">12</div>
-            </div>
-            <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
-                <div class="text-green-500 text-3xl mb-2"><i class="fas fa-building"></i></div>
-                <div class="text-gray-500 text-sm uppercase">Departments</div>
-                <div class="text-3xl font-bold">6</div>
+            <div class="bg-gray-50 px-8 py-4 border-t border-gray-100 text-center">
+                <span class="text-xs text-gray-400 uppercase tracking-widest font-bold">Minor Project 2024</span>
             </div>
         </div>
+    </div>
 
-        <!-- Recent Employee List -->
-        <section class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
-            <div class="p-6 border-b border-gray-100 flex justify-between items-center">
-                <h3 class="font-bold text-gray-800 text-lg">Employee Management</h3>
-                <button class="bg-indigo-600 text-white px-4 py-2 rounded hover:bg-indigo-700">
-                    <i class="fas fa-plus mr-1"></i> Add Employee
+    <!-- DASHBOARD VIEW -->
+    <div id="dashboard-view" class="hidden flex">
+        <!-- Sidebar -->
+        <aside class="w-64 bg-indigo-900 text-white min-h-screen p-4 fixed hidden md:block">
+            <h1 class="text-2xl font-bold mb-8 flex items-center">
+                <i class="fas fa-users-cog mr-2"></i> EMS Pro
+            </h1>
+            <nav class="space-y-2">
+                
+                <button onclick="showSection('employees')" id="nav-employees" class="nav-link w-full text-left p-3 bg-indigo-800 rounded transition flex items-center">
+                    <i class="fas fa-user-friends mr-3"></i> Employees
+                </button>
+                <button onclick="showSection('leaves')" id="nav-leaves" class="nav-link w-full text-left p-3 hover:bg-indigo-700 rounded transition flex items-center">
+                    <i class="fas fa-calendar-check mr-3"></i> Leave Requests
+                </button>
+                <button onclick="showSection('analytics')" id="nav-analytics" class="nav-link w-full text-left p-3 hover:bg-indigo-700 rounded transition flex items-center">
+                    <i class="fas fa-chart-bar mr-3"></i> Analytics
+                </button>
+            </nav>
+            <div class="absolute bottom-4 left-4 right-4">
+                <button onclick="logout()" class="w-full bg-red-600 p-2 rounded hover:bg-red-700 transition">
+                    <i class="fas fa-sign-out-alt mr-2"></i> Logout
                 </button>
             </div>
-            <table class="w-full text-left">
-                <thead class="bg-gray-50 text-gray-500 uppercase text-xs">
-                    <tr>
-                        <th class="p-4">Name</th>
-                        <th class="p-4">Department</th>
-                        <th class="p-4">Status</th>
-                        <th class="p-4">Actions</th>
-                    </tr>
-                </thead>
-                <tbody class="divide-y divide-gray-100">
-                    <tr>
-                        <td class="p-4 flex items-center">
-                            <div class="w-8 h-8 rounded-full bg-gray-200 mr-3 flex items-center justify-center text-xs font-bold">JD</div>
-                            <div>
-                                <div class="font-medium">John Doe</div>
-                                <div class="text-xs text-gray-400">john@example.com</div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="flex-1 md:ml-64 p-8">
+            <header class="flex justify-between items-center mb-8 bg-white p-4 rounded-xl shadow-sm border border-gray-100">
+                <h2 id="section-title" class="text-2xl font-semibold text-gray-800">Employee Management</h2>
+                <div class="flex items-center space-x-4">
+                    <span class="text-gray-600 font-medium">Hello, <span id="display-username" class="text-indigo-600 font-bold uppercase">User</span></span>
+                </div>
+            </header>
+
+            <!-- Analytics Section -->
+            <div id="section-analytics" class="content-section">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+                    <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100 h-80">
+                        <h3 class="font-bold text-gray-700 mb-4 uppercase text-xs tracking-wider">Leave Status Distribution</h3>
+                        <canvas id="leaveStatusChart"></canvas>
+                    </div>
+                    <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100 h-80">
+                        <h3 class="font-bold text-gray-700 mb-4 uppercase text-xs tracking-wider">Monthly Leave Requests</h3>
+                        <canvas id="leaveTrendChart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Employee Section -->
+            <div id="section-employees" class="content-section active">
+                <section class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+                    <div class="p-6 border-b border-gray-100 flex justify-between items-center">
+                        <h3 class="font-bold text-gray-800 text-lg">Manage Staff</h3>
+                        <button onclick="toggleEmployeeForm()" class="bg-indigo-600 text-white px-4 py-2 rounded hover:bg-indigo-700 transition">
+                            <i class="fas fa-plus mr-1"></i> Add Employee
+                        </button>
+                    </div>
+                    
+                    <div id="employee-form-container" class="hidden p-6 bg-gray-50 border-b border-gray-100">
+                        <form id="employee-form" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <input type="hidden" id="employee-id">
+                            <input type="text" id="firstName" placeholder="First Name" class="p-2 border rounded shadow-sm focus:ring-1 focus:ring-indigo-400 outline-none" required>
+                            <input type="text" id="lastName" placeholder="Last Name" class="p-2 border rounded shadow-sm focus:ring-1 focus:ring-indigo-400 outline-none" required>
+                            <input type="email" id="email" placeholder="Email" class="p-2 border rounded shadow-sm focus:ring-1 focus:ring-indigo-400 outline-none" required>
+                            <input type="text" id="position" placeholder="Position" class="p-2 border rounded shadow-sm focus:ring-1 focus:ring-indigo-400 outline-none">
+                            <div class="md:col-span-2 flex justify-end space-x-2 pt-2">
+                                <button type="button" onclick="toggleEmployeeForm()" class="px-4 py-2 border rounded hover:bg-gray-100">Cancel</button>
+                                <button type="submit" class="px-4 py-2 bg-indigo-600 text-white rounded hover:bg-indigo-700 shadow-md">Save Changes</button>
                             </div>
-                        </td>
-                        <td class="p-4">IT Support</td>
-                        <td class="p-4"><span class="px-2 py-1 bg-green-100 text-green-700 rounded-full text-xs">Active</span></td>
-                        <td class="p-4">
-                            <button class="text-blue-600 hover:text-blue-800 mr-3"><i class="fas fa-edit"></i></button>
-                            <button class="text-red-600 hover:text-red-800"><i class="fas fa-trash"></i></button>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-        </section>
-    </main>
+                        </form>
+                    </div>
+
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left">
+                            <thead class="bg-gray-50 text-gray-500 uppercase text-xs font-bold tracking-wider">
+                                <tr>
+                                    <th class="p-4">Name</th>
+                                    <th class="p-4">Email</th>
+                                    <th class="p-4">Position</th>
+                                    <th class="p-4 text-center">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="employee-table-body" class="divide-y divide-gray-100 text-sm text-gray-700">
+                                <!-- Loaded via JS -->
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+            </div>
+
+            <!-- Leave Section -->
+            <div id="section-leaves" class="content-section">
+                <section class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+                    <div class="p-6 border-b border-gray-100 flex justify-between items-center">
+                        <h3 class="font-bold text-gray-800 text-lg">Leave Requests</h3>
+                        <button onclick="openLeaveModal()" class="bg-orange-500 text-white px-4 py-2 rounded hover:bg-orange-600 transition">
+                            <i class="fas fa-paper-plane mr-1"></i> Request Leave
+                        </button>
+                    </div>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left">
+                            <thead class="bg-gray-50 text-gray-500 uppercase text-xs font-bold tracking-wider">
+                                <tr>
+                                    <th class="p-4">Employee</th>
+                                    <th class="p-4">Dates</th>
+                                    <th class="p-4">Reason</th>
+                                    <th class="p-4">Status</th>
+                                    <th class="p-4 text-center">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="leave-table-body" class="divide-y divide-gray-100 text-sm text-gray-700">
+                                <!-- Loaded via JS -->
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+            </div>
+        </main>
+    </div>
+
+    <!-- Modals -->
+    <div id="confirmation-modal" class="fixed inset-0 bg-black bg-opacity-50 hidden flex items-center justify-center z-50 p-4">
+        <div class="bg-white p-6 rounded-xl max-w-sm w-full shadow-2xl">
+            <h3 class="text-xl font-bold mb-4 text-gray-800">Confirm Deletion</h3>
+            <p class="text-gray-600 mb-6 text-sm">Are you sure you want to remove this employee? This action cannot be undone.</p>
+            <div class="flex justify-end space-x-3">
+                <button onclick="closeConfirmModal()" class="px-4 py-2 border rounded hover:bg-gray-50">Cancel</button>
+                <button id="confirm-delete-btn" class="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700">Delete Permanently</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="leave-modal" class="fixed inset-0 bg-black bg-opacity-50 hidden flex items-center justify-center z-50 p-4">
+        <div class="bg-white p-6 rounded-xl max-w-md w-full shadow-2xl">
+            <h3 class="text-xl font-bold mb-4 text-indigo-800">Submit Leave Request</h3>
+            <form id="leave-form" class="space-y-4">
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-xs font-bold text-gray-400 uppercase mb-1">Start Date</label>
+                        <input type="date" id="leave-start" class="w-full p-2 border rounded focus:ring-1 focus:ring-indigo-500 outline-none" required>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-gray-400 uppercase mb-1">End Date</label>
+                        <input type="date" id="leave-end" class="w-full p-2 border rounded focus:ring-1 focus:ring-indigo-500 outline-none" required>
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-gray-400 uppercase mb-1">Reason for Leave</label>
+                    <textarea id="leave-reason" class="w-full p-2 border rounded focus:ring-1 focus:ring-indigo-500 outline-none" rows="3" placeholder="Explain why you need leave..." required></textarea>
+                </div>
+                <div class="flex justify-end space-x-3 pt-2">
+                    <button type="button" onclick="closeLeaveModal()" class="px-4 py-2 border rounded hover:bg-gray-50">Cancel</button>
+                    <button type="submit" class="px-4 py-2 bg-indigo-600 text-white rounded hover:bg-indigo-700 shadow-md">Submit Request</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- LOGIC -->
+    <script>
+        const API_BASE = 'http://localhost:8080/api';
+        let currentEmployeeIdToDelete = null;
+
+        // AUTH HELPERS
+        const getAuthHeaders = () => {
+            const token = localStorage.getItem('auth_token');
+            return {
+                'Content-Type': 'application/json',
+                'Authorization': `Basic ${token}`
+            };
+        };
+
+        const checkSession = () => {
+            const token = localStorage.getItem('auth_token');
+            const user = localStorage.getItem('username');
+            if (token) {
+                document.getElementById('login-view').classList.add('hidden');
+                document.getElementById('dashboard-view').classList.remove('hidden');
+                document.getElementById('display-username').textContent = user;
+                fetchEmployees(); // Start loading data
+            } else {
+                document.getElementById('login-view').classList.remove('hidden');
+                document.getElementById('dashboard-view').classList.add('hidden');
+            }
+        };
+
+        // LOGIN HANDLER
+        document.getElementById('loginForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const user = document.getElementById('username').value;
+            const pass = document.getElementById('password').value;
+            const errorDiv = document.getElementById('errorMessage');
+            
+            try {
+                const credentials = btoa(`${user}:${pass}`);
+                // Verify credentials by calling the get employees endpoint
+                const response = await fetch(`${API_BASE}/employees`, {
+                    headers: { 'Authorization': `Basic ${credentials}` }
+                });
+
+                if (response.ok) {
+                    localStorage.setItem('auth_token', credentials);
+                    localStorage.setItem('username', user);
+                    checkSession();
+                } else {
+                    errorDiv.classList.remove('hidden');
+                }
+            } catch (err) {
+                errorDiv.textContent = "Cannot connect to server (8080)";
+                errorDiv.classList.remove('hidden');
+            }
+        });
+
+        const logout = () => {
+            localStorage.clear();
+            checkSession();
+        };
+
+        // NAVIGATION
+        const showSection = (id) => {
+            document.querySelectorAll('.content-section').forEach(s => s.classList.remove('active'));
+            document.getElementById(`section-${id}`).classList.add('active');
+            
+            document.getElementById('section-title').textContent = id === 'employees' ? 'Employee Management' : 'Leave Management';
+            
+            // Update links
+            document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('bg-indigo-800'));
+            document.getElementById(`nav-${id}`).classList.add('bg-indigo-800');
+
+            if (id === 'employees') fetchEmployees();
+            if (id === 'leaves') fetchLeaves();
+            if (id === 'analytics') renderAnalytics();
+        };
+
+         // DATA FETCHING
+        const fetchEmployees = async () => {
+            const res = await fetch(`${API_BASE}/employees`, { headers: getAuthHeaders() });
+            const data = await res.json();
+            document.getElementById('employee-table-body').innerHTML = data.map(emp => `
+                <tr class="hover:bg-gray-50"><td class="p-4 font-bold">${emp.firstName} ${emp.lastName}</td><td class="p-4">${emp.email}</td><td class="p-4">${emp.position}</td><td class="p-4 text-center">...</td></tr>
+            `).join('');
+        };
+
+        // --LEAVE API--
+        const fetchLeaves = async () => {
+            const res = await fetch(`${API_BASE}/leaves`, { headers: getAuthHeaders() });
+            const data = await res.json();
+            document.getElementById('leave-table-body').innerHTML = data.map(l => `
+                <tr><td class="p-4 font-bold">${l.employee?.firstName || 'User'}</td><td class="p-4 text-xs">${l.startDate} - ${l.endDate}</td><td class="p-4 italic">"${l.reason}"</td><td class="p-4"><span class="px-2 py-1 rounded-full text-[10px] font-bold bg-gray-100">${l.status}</span></td><td class="p-4 text-center">...</td></tr>
+            `).join('');
+            return data;
+        };
+
+        // ANALYTICS
+        const renderAnalytics = async () => {
+            const leaves = await fetchLeaves();
+            const stats = { PENDING: 0, APPROVED: 0, REJECTED: 0 };
+            const monthlyData = new Array(12).fill(0);
+
+            leaves.forEach(l => {
+                stats[l.status]++;
+                const month = new Date(l.startDate).getMonth();
+                monthlyData[month]++;
+            });
+
+            // Status Chart
+            if (statusChart) statusChart.destroy();
+            statusChart = new Chart(document.getElementById('leaveStatusChart'), {
+                type: 'doughnut',
+                data: {
+                    labels: ['Pending', 'Approved', 'Rejected'],
+                    datasets: [{
+                        data: [stats.PENDING, stats.APPROVED, stats.REJECTED],
+                        backgroundColor: ['#f59e0b', '#10b981', '#ef4444']
+                    }]
+                },
+                options: { maintainAspectRatio: false }
+            });
+
+            // Trend Chart
+            if (trendChart) trendChart.destroy();
+            trendChart = new Chart(document.getElementById('leaveTrendChart'), {
+                type: 'bar',
+                data: {
+                    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+                    datasets: [{
+                        label: 'Requests',
+                        data: monthlyData,
+                        backgroundColor: '#6366f1'
+                    }]
+                },
+                options: { maintainAspectRatio: false, scales: { y: { beginAtZero: true, ticks: { stepSize: 1 } } } }
+            });
+        };
+
+
+        const renderEmployees = (list) => {
+            const body = document.getElementById('employee-table-body');
+            body.innerHTML = list.length === 0 ? `<tr><td colspan="4" class="p-8 text-center text-gray-400">No employees found.</td></tr>` : 
+            list.map(emp => `
+                <tr class="hover:bg-gray-50 transition">
+                    <td class="p-4 font-semibold text-gray-900">${emp.firstName} ${emp.lastName}</td>
+                    <td class="p-4 text-gray-500">${emp.email}</td>
+                    <td class="p-4 italic">${emp.position || 'N/A'}</td>
+                    <td class="p-4 text-center">
+                        <button onclick="editEmployee(${emp.id}, '${emp.firstName}', '${emp.lastName}', '${emp.email}', '${emp.position}')" class="text-indigo-600 hover:text-indigo-900 mx-2"><i class="fas fa-edit"></i></button>
+                        <button onclick="askDelete(${emp.id})" class="text-red-600 hover:text-red-800 mx-2"><i class="fas fa-trash"></i></button>
+                    </td>
+                </tr>
+            `).join('');
+        };
+
+        const toggleEmployeeForm = () => document.getElementById('employee-form-container').classList.toggle('hidden');
+
+        document.getElementById('employee-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const id = document.getElementById('employee-id').value;
+            const payload = {
+                firstName: document.getElementById('firstName').value,
+                lastName: document.getElementById('lastName').value,
+                email: document.getElementById('email').value,
+                position: document.getElementById('position').value
+            };
+
+            const url = id ? `${API_BASE}/employees/${id}` : `${API_BASE}/employees`;
+            const method = id ? 'PUT' : 'POST';
+
+            await fetch(url, {
+                method,
+                headers: getAuthHeaders(),
+                body: JSON.stringify(payload)
+            });
+            
+            document.getElementById('employee-form').reset();
+            document.getElementById('employee-id').value = '';
+            toggleEmployeeForm();
+            fetchEmployees();
+        });
+
+        window.editEmployee = (id, f, l, e, p) => {
+            document.getElementById('employee-id').value = id;
+            document.getElementById('firstName').value = f;
+            document.getElementById('lastName').value = l;
+            document.getElementById('email').value = e;
+            document.getElementById('position').value = p;
+            if (document.getElementById('employee-form-container').classList.contains('hidden')) toggleEmployeeForm();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        };
+
+        window.askDelete = (id) => {
+            currentEmployeeIdToDelete = id;
+            document.getElementById('confirmation-modal').classList.remove('hidden');
+        };
+
+        window.closeConfirmModal = () => document.getElementById('confirmation-modal').classList.add('hidden');
+
+        document.getElementById('confirm-delete-btn').addEventListener('click', async () => {
+            if (currentEmployeeIdToDelete) {
+                await fetch(`${API_BASE}/employees/${currentEmployeeIdToDelete}`, { 
+                    method: 'DELETE', 
+                    headers: getAuthHeaders() 
+                });
+                closeConfirmModal();
+                fetchEmployees();
+            }
+        });
+
+
+        const renderLeaves = (list) => {
+            const body = document.getElementById('leave-table-body');
+            body.innerHTML = list.length === 0 ? `<tr><td colspan="5" class="p-8 text-center text-gray-400">No leave requests found.</td></tr>` : 
+            list.map(req => `
+                <tr class="hover:bg-gray-50 transition">
+                    <td class="p-4 font-medium">${req.employee ? req.employee.firstName : 'Self'}</td>
+                    <td class="p-4 text-xs font-mono text-gray-500">${req.startDate} to ${req.endDate}</td>
+                    <td class="p-4 italic text-gray-600">"${req.reason}"</td>
+                    <td class="p-4">
+                        <span class="px-2 py-1 rounded-full text-xs font-bold ${getStatusClass(req.status)}">
+                            ${req.status}
+                        </span>
+                    </td>
+                    <td class="p-4 text-center">
+                        <button onclick="setLeaveStatus(${req.id}, 'APPROVED')" class="text-green-600 hover:text-green-800 mx-1"><i class="fas fa-check-circle"></i></button>
+                        <button onclick="setLeaveStatus(${req.id}, 'REJECTED')" class="text-red-600 hover:text-red-800 mx-1"><i class="fas fa-times-circle"></i></button>
+                    </td>
+                </tr>
+            `).join('');
+        };
+
+        const getStatusClass = (s) => {
+            if (s === 'APPROVED') return 'bg-green-100 text-green-700';
+            if (s === 'REJECTED') return 'bg-red-100 text-red-700';
+            return 'bg-orange-100 text-orange-700';
+        };
+
+        window.setLeaveStatus = async (id, status) => {
+            await fetch(`${API_BASE}/leaves/${id}/status?status=${status}`, {
+                method: 'PUT',
+                headers: getAuthHeaders()
+            });
+            fetchLeaves();
+        };
+
+        window.openLeaveModal = () => document.getElementById('leave-modal').classList.remove('hidden');
+        window.closeLeaveModal = () => document.getElementById('leave-modal').classList.add('hidden');
+
+        document.getElementById('leave-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const payload = {
+                startDate: document.getElementById('leave-start').value,
+                endDate: document.getElementById('leave-end').value,
+                reason: document.getElementById('leave-reason').value
+            };
+
+            await fetch(`${API_BASE}/leaves`, {
+                method: 'POST',
+                headers: getAuthHeaders(),
+                body: JSON.stringify(payload)
+            });
+            
+            closeLeaveModal();
+            fetchLeaves();
+        });
+
+        // INIT
+        checkSession();
+    </script>
 </body>
 </html>

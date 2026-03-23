@@ -1,6 +1,6 @@
 package com.ghtk.employee.model;
 
 // 1. ROLE ENUM
-enum Role {
+public enum Role {
     ADMIN, EMPLOYEE
 }

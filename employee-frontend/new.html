@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EMS Pro - Analytics Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        body { font-family: 'Inter', sans-serif; }
+        .content-section { display: none; }
+        .content-section.active { display: block; }
+    </style>
+</head>
+<body class="bg-gray-50 min-h-screen">
+
+    <!-- LOGIN PAGE VIEW -->
+    <div id="login-view" class="bg-indigo-900 min-h-screen flex items-center justify-center p-6">
+        <div class="bg-white w-full max-w-md rounded-2xl shadow-2xl overflow-hidden">
+            <div class="p-8 text-center">
+                <div class="inline-flex items-center justify-center w-16 h-16 bg-indigo-100 text-indigo-600 rounded-full mb-4">
+                    <i class="fas fa-lock text-2xl"></i>
+                </div>
+                <h1 class="text-3xl font-bold text-gray-800">Welcome Back</h1>
+                <p class="text-gray-500 mt-2">Employee Management System</p>
+                <form id="loginForm" class="mt-8 space-y-6 text-left">
+                    <input type="text" id="username" placeholder="Username" class="w-full p-3 border rounded-lg" required>
+                    <input type="password" id="password" placeholder="Password" class="w-full p-3 border rounded-lg" required>
+                    <button type="submit" class="w-full bg-indigo-600 text-white py-3 rounded-lg font-bold hover:bg-indigo-700 transition">Sign In</button>
+                    <div id="errorMessage" class="hidden text-red-500 text-sm mt-2 text-center">Invalid credentials</div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- DASHBOARD VIEW -->
+    <div id="dashboard-view" class="hidden flex">
+        <aside class="w-64 bg-indigo-900 text-white min-h-screen p-4 fixed">
+            <h1 class="text-2xl font-bold mb-8 flex items-center"><i class="fas fa-users-cog mr-2"></i> EMS Pro</h1>
+            <nav class="space-y-2">
+                <button onclick="showSection('analytics')" id="nav-analytics" class="nav-link w-full text-left p-3 hover:bg-indigo-700 rounded transition flex items-center">
+                    <i class="fas fa-chart-pie mr-3"></i> Analytics
+                </button>
+                <button onclick="showSection('employees')" id="nav-employees" class="nav-link w-full text-left p-3 bg-indigo-800 rounded transition flex items-center">
+                    <i class="fas fa-user-friends mr-3"></i> Employees
+                </button>
+                <button onclick="showSection('leaves')" id="nav-leaves" class="nav-link w-full text-left p-3 hover:bg-indigo-700 rounded transition flex items-center">
+                    <i class="fas fa-calendar-check mr-3"></i> Leave Requests
+                </button>
+            </nav>
+            <button onclick="logout()" class="absolute bottom-4 left-4 right-4 bg-red-600 p-2 rounded hover:bg-red-700 transition">
+                <i class="fas fa-sign-out-alt mr-2"></i> Logout
+            </button>
+        </aside>
+
+        <main class="flex-1 ml-64 p-8">
+            <header class="flex justify-between items-center mb-8 bg-white p-6 rounded-xl shadow-sm border border-gray-100">
+                <h2 id="section-title" class="text-2xl font-bold text-gray-800">Analytics Dashboard</h2>
+                <div class="flex items-center space-x-4">
+                    <span class="text-gray-600 font-medium italic">Welcome, <span id="display-username" class="text-indigo-600 font-bold">User</span></span>
+                </div>
+            </header>
+
+            <!-- Analytics Section -->
+            <div id="section-analytics" class="content-section">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+                    <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100 h-80">
+                        <h3 class="font-bold text-gray-700 mb-4 uppercase text-xs tracking-wider">Leave Status Distribution</h3>
+                        <canvas id="leaveStatusChart"></canvas>
+                    </div>
+                    <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100 h-80">
+                        <h3 class="font-bold text-gray-700 mb-4 uppercase text-xs tracking-wider">Monthly Leave Requests</h3>
+                        <canvas id="leaveTrendChart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Employee Section -->
+            <div id="section-employees" class="content-section active">
+                <section class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+                    <div class="p-6 border-b border-gray-100 flex justify-between items-center">
+                        <h3 class="font-bold text-gray-800 text-lg">Staff Directory</h3>
+                        <button onclick="toggleEmployeeForm()" class="bg-indigo-600 text-white px-4 py-2 rounded hover:bg-indigo-700">Add New</button>
+                    </div>
+                    <div id="employee-form-container" class="hidden p-6 bg-gray-50 border-b border-gray-100">
+                        <!-- Form as before -->
+                        <form id="employee-form" class="grid grid-cols-2 gap-4">
+                            <input type="hidden" id="employee-id">
+                            <input type="text" id="firstName" placeholder="First Name" class="p-2 border rounded" required>
+                            <input type="text" id="lastName" placeholder="Last Name" class="p-2 border rounded" required>
+                            <input type="email" id="email" placeholder="Email" class="p-2 border rounded" required>
+                            <input type="text" id="position" placeholder="Position" class="p-2 border rounded">
+                            <div class="col-span-2 flex justify-end space-x-2">
+                                <button type="submit" class="px-4 py-2 bg-indigo-600 text-white rounded">Save</button>
+                            </div>
+                        </form>
+                    </div>
+                    <table class="w-full text-left">
+                        <thead class="bg-gray-50 text-gray-500 uppercase text-[10px] font-black">
+                            <tr><th class="p-4">Name</th><th class="p-4">Email</th><th class="p-4">Position</th><th class="p-4 text-center">Actions</th></tr>
+                        </thead>
+                        <tbody id="employee-table-body" class="divide-y divide-gray-100"></tbody>
+                    </table>
+                </section>
+            </div>
+
+            <!-- Leave Section -->
+            <div id="section-leaves" class="content-section">
+                <section class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+                    <div class="p-6 border-b border-gray-100 flex justify-between items-center">
+                        <h3 class="font-bold text-gray-800 text-lg">Requests History</h3>
+                        <button onclick="openLeaveModal()" class="bg-orange-500 text-white px-4 py-2 rounded">New Request</button>
+                    </div>
+                    <table class="w-full text-left">
+                        <thead class="bg-gray-50 text-gray-500 uppercase text-[10px] font-black">
+                            <tr><th class="p-4">Employee</th><th class="p-4">Period</th><th class="p-4">Reason</th><th class="p-4">Status</th><th class="p-4 text-center">Action</th></tr>
+                        </thead>
+                        <tbody id="leave-table-body" class="divide-y divide-gray-100"></tbody>
+                    </table>
+                </section>
+            </div>
+        </main>
+    </div>
+
+    <!-- Modals (Leave Request) -->
+    <div id="leave-modal" class="fixed inset-0 bg-black/50 hidden flex items-center justify-center z-50 p-4">
+        <div class="bg-white p-6 rounded-xl max-w-md w-full">
+            <h3 class="text-xl font-bold mb-4 text-indigo-800">Request Leave</h3>
+            <form id="leave-form" class="space-y-4">
+                <div class="grid grid-cols-2 gap-4">
+                    <input type="date" id="leave-start" class="p-2 border rounded w-full" required>
+                    <input type="date" id="leave-end" class="p-2 border rounded w-full" required>
+                </div>
+                <textarea id="leave-reason" class="w-full p-2 border rounded" placeholder="Reason..." required></textarea>
+                <div class="flex justify-end space-x-2">
+                    <button type="button" onclick="closeLeaveModal()" class="px-4 py-2 border rounded">Cancel</button>
+                    <button type="submit" class="px-4 py-2 bg-indigo-600 text-white rounded">Submit</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        const API_BASE = 'http://localhost:8080/api';
+        let statusChart, trendChart;
+
+        const getAuthHeaders = () => ({
+            'Content-Type': 'application/json',
+            'Authorization': `Basic ${localStorage.getItem('auth_token')}`
+        });
+
+        const checkSession = () => {
+            const token = localStorage.getItem('auth_token');
+            if (token) {
+                document.getElementById('login-view').classList.add('hidden');
+                document.getElementById('dashboard-view').classList.remove('hidden');
+                document.getElementById('display-username').textContent = localStorage.getItem('username');
+                showSection('analytics');
+            }
+        };
+
+        // LOGIN
+        document.getElementById('loginForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const credentials = btoa(`${document.getElementById('username').value}:${document.getElementById('password').value}`);
+            const res = await fetch(`${API_BASE}/employees`, { headers: { 'Authorization': `Basic ${credentials}` } });
+            if (res.ok) {
+                localStorage.setItem('auth_token', credentials);
+                localStorage.setItem('username', document.getElementById('username').value);
+                checkSession();
+            } else {
+                document.getElementById('errorMessage').classList.remove('hidden');
+            }
+        });
+
+        const logout = () => { localStorage.clear(); location.reload(); };
+
+        // NAVIGATION
+        const showSection = (id) => {
+            document.querySelectorAll('.content-section').forEach(s => s.classList.remove('active'));
+            document.getElementById(`section-${id}`).classList.add('active');
+            document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('bg-indigo-800'));
+            document.getElementById(`nav-${id}`).classList.add('bg-indigo-800');
+            document.getElementById('section-title').textContent = id.charAt(0).toUpperCase() + id.slice(1) + " Dashboard";
+
+            if (id === 'employees') fetchEmployees();
+            if (id === 'leaves') fetchLeaves();
+            if (id === 'analytics') renderAnalytics();
+        };
+
+        // DATA FETCHING
+        const fetchEmployees = async () => {
+            const res = await fetch(`${API_BASE}/employees`, { headers: getAuthHeaders() });
+            const data = await res.json();
+            document.getElementById('employee-table-body').innerHTML = data.map(emp => `
+                <tr class="hover:bg-gray-50"><td class="p-4 font-bold">${emp.firstName} ${emp.lastName}</td><td class="p-4">${emp.email}</td><td class="p-4">${emp.position}</td><td class="p-4 text-center">...</td></tr>
+            `).join('');
+        };
+
+        const fetchLeaves = async () => {
+            const res = await fetch(`${API_BASE}/leaves`, { headers: getAuthHeaders() });
+            const data = await res.json();
+            document.getElementById('leave-table-body').innerHTML = data.map(l => `
+                <tr><td class="p-4 font-bold">${l.employee?.firstName || 'User'}</td><td class="p-4 text-xs">${l.startDate} - ${l.endDate}</td><td class="p-4 italic">"${l.reason}"</td><td class="p-4"><span class="px-2 py-1 rounded-full text-[10px] font-bold bg-gray-100">${l.status}</span></td><td class="p-4 text-center">...</td></tr>
+            `).join('');
+            return data;
+        };
+
+        // ANALYTICS
+        const renderAnalytics = async () => {
+            const leaves = await fetchLeaves();
+            const stats = { PENDING: 0, APPROVED: 0, REJECTED: 0 };
+            const monthlyData = new Array(12).fill(0);
+
+            leaves.forEach(l => {
+                stats[l.status]++;
+                const month = new Date(l.startDate).getMonth();
+                monthlyData[month]++;
+            });
+
+            // Status Chart
+            if (statusChart) statusChart.destroy();
+            statusChart = new Chart(document.getElementById('leaveStatusChart'), {
+                type: 'doughnut',
+                data: {
+                    labels: ['Pending', 'Approved', 'Rejected'],
+                    datasets: [{
+                        data: [stats.PENDING, stats.APPROVED, stats.REJECTED],
+                        backgroundColor: ['#f59e0b', '#10b981', '#ef4444']
+                    }]
+                },
+                options: { maintainAspectRatio: false }
+            });
+
+            // Trend Chart
+            if (trendChart) trendChart.destroy();
+            trendChart = new Chart(document.getElementById('leaveTrendChart'), {
+                type: 'bar',
+                data: {
+                    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+                    datasets: [{
+                        label: 'Requests',
+                        data: monthlyData,
+                        backgroundColor: '#6366f1'
+                    }]
+                },
+                options: { maintainAspectRatio: false, scales: { y: { beginAtZero: true, ticks: { stepSize: 1 } } } }
+            });
+        };
+
+        // Modal Helpers
+        const openLeaveModal = () => document.getElementById('leave-modal').classList.remove('hidden');
+        const closeLeaveModal = () => document.getElementById('leave-modal').classList.add('hidden');
+        const toggleEmployeeForm = () => document.getElementById('employee-form-container').classList.toggle('hidden');
+
+        checkSession();
+    </script>
+</body>
+</html>

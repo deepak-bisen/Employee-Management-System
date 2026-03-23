@@ -1,6 +1,20 @@
 document.addEventListener('DOMContentLoaded', () => {
     const API_URL = 'http://localhost:8080/api/employees';
 
+    // Helper to get Auth Headers for every request
+    const getAuthHeaders = () => {
+        const token = localStorage.getItem('auth_token');
+        if (!token) {
+            // If no token, redirect to login
+            window.location.href = 'login.html';
+            return {};
+        }
+        return {
+            'Content-Type': 'application/json',
+            'Authorization': `Basic ${token}`
+        };
+    };
+
     // Form elements
     const employeeForm = document.getElementById('employee-form');
     const employeeIdInput = document.getElementById('employee-id');
@@ -22,13 +36,21 @@ document.addEventListener('DOMContentLoaded', () => {
     // --- API Functions ---
     const fetchEmployees = async () => {
         try {
-            const response = await fetch(API_URL);
+            const response = await fetch(API_URL, {
+                headers: getAuthHeaders()
+            });
+            
+            if (response.status === 401 || response.status === 403) {
+                window.location.href = 'login.html';
+                return;
+            }
+
             if (!response.ok) throw new Error('Network response was not ok');
             const employees = await response.json();
             renderEmployees(employees);
         } catch (error) {
             console.error('Error fetching employees:', error);
-            employeeTableBody.innerHTML = `<tr><td colspan="5" class="text-center p-8 text-red-500">Failed to load employees. Is the backend server running?</td></tr>`;
+            employeeTableBody.innerHTML = `<tr><td colspan="5" class="text-center p-8 text-red-500 font-bold italic">Access Denied. Please ensure you are logged in as an Admin.</td></tr>`;
         }
     };
 
@@ -39,13 +61,15 @@ document.addEventListener('DOMContentLoaded', () => {
         try {
             const response = await fetch(url, {
                 method: method,
-                headers: { 'Content-Type': 'application/json' },
+                headers: getAuthHeaders(),
                 body: JSON.stringify(employeeData),
             });
 
             if (response.ok) {
                 clearForm();
                 fetchEmployees();
+            } else if (response.status === 403) {
+                alert("Permission Denied: Only Admins can modify employee data.");
             } else {
                 console.error('Failed to save employee:', await response.text());
             }
@@ -56,9 +80,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const performDeleteEmployee = async (id) => {
         try {
-            const response = await fetch(`${API_URL}/${id}`, { method: 'DELETE' });
+            const response = await fetch(`${API_URL}/${id}`, { 
+                method: 'DELETE',
+                headers: getAuthHeaders()
+            });
+
             if (response.ok) {
                 fetchEmployees();
+            } else if (response.status === 403) {
+                alert("Permission Denied: Only Admins can delete employees.");
             } else {
                 console.error('Failed to delete employee:', await response.text());
             }
@@ -72,22 +102,26 @@ document.addEventListener('DOMContentLoaded', () => {
     // --- UI Rendering ---
     const renderEmployees = (employees) => {
         employeeTableBody.innerHTML = '';
-        if (employees.length === 0) {
-            employeeTableBody.innerHTML = `<tr><td colspan="5" class="text-center p-8 text-gray-500">No employees found. Add one using the form above.</td></tr>`;
+        if (!employees || employees.length === 0) {
+            employeeTableBody.innerHTML = `<tr><td colspan="5" class="text-center p-8 text-gray-500 font-medium">No records found.</td></tr>`;
             return;
         }
 
         employees.forEach(employee => {
             const row = document.createElement('tr');
-            row.className = 'hover:bg-gray-50';
+            row.className = 'hover:bg-gray-50 border-b border-gray-100 transition';
             row.innerHTML = `
-                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">${employee.id}</td>
-                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">${employee.firstName} ${employee.lastName}</td>
-                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">${employee.email}</td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">#${employee.id}</td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700 font-semibold">${employee.firstName} ${employee.lastName}</td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 italic">${employee.email}</td>
                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">${employee.position}</td>
-                <td class="px-6 py-4 whitespace-nowrap text-center text-sm font-medium space-x-2">
-                    <button class="text-indigo-600 hover:text-indigo-900" onclick="window.editEmployeeHandler(${employee.id}, '${employee.firstName}', '${employee.lastName}', '${employee.email}', '${employee.position}')">Edit</button>
-                    <button class="text-red-600 hover:text-red-900" onclick="window.deleteEmployeeHandler(${employee.id})">Delete</button>
+                <td class="px-6 py-4 whitespace-nowrap text-center text-sm font-medium space-x-3">
+                    <button class="text-indigo-600 hover:text-indigo-900 transition p-1" onclick="window.editEmployeeHandler(${employee.id}, '${employee.firstName}', '${employee.lastName}', '${employee.email}', '${employee.position}')">
+                        <i class="fas fa-edit"></i> Edit
+                    </button>
+                    <button class="text-red-600 hover:text-red-900 transition p-1" onclick="window.deleteEmployeeHandler(${employee.id})">
+                        <i class="fas fa-trash"></i> Delete
+                    </button>
                 </td>
             `;
             employeeTableBody.appendChild(row);
@@ -95,26 +129,26 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     // --- Event Handlers & Form Logic ---
-    employeeForm.addEventListener('submit', (e) => {
-        e.preventDefault();
-        const employeeData = {
-            firstName: firstNameInput.value,
-            lastName: lastNameInput.value,
-            email: emailInput.value,
-            position: positionInput.value,
-        };
-        saveEmployee(employeeData, employeeIdInput.value);
-    });
+    if (employeeForm) {
+        employeeForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const employeeData = {
+                firstName: firstNameInput.value,
+                lastName: lastNameInput.value,
+                email: emailInput.value,
+                position: positionInput.value,
+            };
+            saveEmployee(employeeData, employeeIdInput.value);
+        });
+    }
 
     const clearForm = () => {
-        employeeForm.reset();
+        if (employeeForm) employeeForm.reset();
         employeeIdInput.value = '';
         window.scrollTo({ top: 0, behavior: 'smooth' });
     };
 
-
-
-    clearBtn.addEventListener('click', clearForm);
+    if (clearBtn) clearBtn.addEventListener('click', clearForm);
 
     // Make handlers globally accessible
     window.editEmployeeHandler = (id, firstName, lastName, email, position) => {
@@ -133,18 +167,20 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     // --- Modal Logic ---
-    const openModal = () => confirmationModal.classList.remove('hidden');
+    const openModal = () => confirmationModal && confirmationModal.classList.remove('hidden');
     const closeModal = () => {
-        confirmationModal.classList.add('hidden');
+        if (confirmationModal) confirmationModal.classList.add('hidden');
         employeeIdToDelete = null;
     };
 
-    confirmDeleteBtn.addEventListener('click', () => {
-        if (employeeIdToDelete) {
-            performDeleteEmployee(employeeIdToDelete);
-        }
-    });
-    cancelDeleteBtn.addEventListener('click', closeModal);
+    if (confirmDeleteBtn) {
+        confirmDeleteBtn.addEventListener('click', () => {
+            if (employeeIdToDelete) {
+                performDeleteEmployee(employeeIdToDelete);
+            }
+        });
+    }
+    if (cancelDeleteBtn) cancelDeleteBtn.addEventListener('click', closeModal);
 
     // Initial fetch
     fetchEmployees();
