@@ -7,7 +7,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <style>
+      <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
         body { font-family: 'Inter', sans-serif; transition: background 0.3s; }
         .content-section { display: none; }
@@ -22,7 +22,7 @@
 </head>
 <body class="bg-gray-50 min-h-screen">
 
-    <!-- AUTHENTICATION VIEW (Login/Register) -->
+    <!-- AUTHENTICATION VIEW -->
     <div id="login-view" class="bg-indigo-900 min-h-screen flex items-center justify-center p-6">
         <div class="bg-white w-full max-w-md rounded-2xl shadow-2xl overflow-hidden">
             <div class="p-8 text-center">
@@ -32,7 +32,6 @@
                 <h1 id="auth-title" class="text-3xl font-bold text-gray-800">Welcome Back</h1>
                 <p id="auth-subtitle" class="text-gray-500 mt-2 text-sm uppercase tracking-wide">Secure Access Terminal</p>
                 
-                <!-- Login Form -->
                 <form id="loginForm" class="mt-8 space-y-4 text-left">
                     <input type="text" id="username" placeholder="Username" class="w-full p-3 border rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none" required>
                     <input type="password" id="password" placeholder="Password" class="w-full p-3 border rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none" required>
@@ -40,7 +39,6 @@
                     <p class="text-sm text-gray-500 mt-4 text-center">New employee? <a href="#" onclick="toggleAuth(true)" class="text-indigo-600 font-bold hover:underline">Register here</a></p>
                 </form>
 
-                <!-- Registration Form -->
                 <form id="registerForm" class="mt-8 space-y-4 text-left hidden">
                     <div class="grid grid-cols-2 gap-3">
                         <input type="text" id="reg-firstName" placeholder="First Name" class="w-full p-3 border rounded-lg outline-none" required>
@@ -61,7 +59,6 @@
 
     <!-- MAIN DASHBOARD VIEW -->
     <div id="dashboard-view" class="hidden flex">
-        <!-- Sidebar -->
         <aside class="w-64 bg-indigo-900 text-white min-h-screen p-4 fixed">
             <h1 class="text-2xl font-bold mb-8 flex items-center"><i class="fas fa-shield-alt mr-2"></i> EMS Pro</h1>
             <nav class="space-y-2">
@@ -80,7 +77,6 @@
             </button>
         </aside>
 
-        <!-- Main Content -->
         <main class="flex-1 ml-64 p-8">
             <header class="flex justify-between items-center mb-8 bg-white p-6 rounded-xl shadow-sm border border-gray-100">
                 <h2 id="section-title" class="text-2xl font-bold text-gray-800 tracking-tight">Dashboard</h2>
@@ -104,39 +100,38 @@
                 </div>
             </div>
 
-            <!-- Employee Directory Section -->
+            <!-- Staff Directory Section -->
             <div id="section-employees" class="content-section">
                 <section class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
                     <div class="p-6 border-b border-gray-100 flex justify-between items-center">
-                        <h3 class="font-bold text-gray-800 text-lg">Staff Records</h3>
+                        <h3 class="font-bold text-gray-800 text-lg">Staff Directory</h3>
                         <button onclick="toggleEmployeeForm()" class="admin-only bg-indigo-600 text-white px-4 py-2 rounded hover:bg-indigo-700 transition">
                             <i class="fas fa-plus mr-1"></i> Add Employee
                         </button>
                     </div>
 
-                    <!-- Hidden Employee Form (Admin Only) -->
-                    <div id="employee-form-container" class="hidden p-6 bg-gray-50 border-b border-gray-100">
+                    <div id="employee-form-container" class="hidden p-6 bg-gray-50 border-b">
                         <form id="employee-form" class="grid grid-cols-1 md:grid-cols-2 gap-4">
                             <input type="hidden" id="employee-id">
-                            <input type="text" id="firstName" placeholder="First Name" class="p-2 border rounded outline-none" required>
-                            <input type="text" id="lastName" placeholder="Last Name" class="p-2 border rounded outline-none" required>
-                            <input type="email" id="email" placeholder="Email Address" class="p-2 border rounded outline-none" required>
-                            <input type="text" id="position" placeholder="Job Title" class="p-2 border rounded outline-none">
+                            <input type="text" id="firstName" placeholder="First Name" class="p-2 border rounded focus:ring-1 focus:ring-indigo-400 outline-none" required>
+                            <input type="text" id="lastName" placeholder="Last Name" class="p-2 border rounded focus:ring-1 focus:ring-indigo-400 outline-none" required>
+                            <input type="email" id="email" placeholder="Email Address" class="p-2 border rounded focus:ring-1 focus:ring-indigo-400 outline-none" required>
+                            <input type="text" id="position" placeholder="Job Title" class="p-2 border rounded focus:ring-1 focus:ring-indigo-400 outline-none">
                             <div class="md:col-span-2 flex justify-end space-x-2 pt-2">
                                 <button type="button" onclick="toggleEmployeeForm()" class="px-4 py-2 border rounded hover:bg-gray-200 transition">Cancel</button>
-                                <button type="submit" class="px-4 py-2 bg-indigo-600 text-white rounded hover:bg-indigo-700 shadow-md">Save Staff</button>
+                                <button type="submit" class="px-4 py-2 bg-indigo-600 text-white rounded hover:bg-indigo-700 shadow-md">Save Changes</button>
                             </div>
                         </form>
                     </div>
 
                     <div class="overflow-x-auto">
                         <table class="w-full text-left">
-                            <thead class="bg-gray-50 text-gray-500 uppercase text-[10px] font-black">
+                            <thead class="bg-gray-50 text-gray-500 uppercase text-[10px] font-black tracking-widest">
                                 <tr>
                                     <th class="p-4">Name</th>
                                     <th class="p-4">Email</th>
                                     <th class="p-4">Position</th>
-                                    <th class="p-4 text-center admin-only">Management</th>
+                                    <th class="p-4 text-center admin-only">Actions</th>
                                 </tr>
                             </thead>
                             <tbody id="employee-table-body" class="divide-y divide-gray-100 text-sm text-gray-700"></tbody>
@@ -151,15 +146,15 @@
                     <div class="p-6 border-b border-gray-100 flex justify-between items-center">
                         <h3 id="leave-header" class="font-bold text-gray-800 text-lg">Leave Status</h3>
                         <button onclick="openLeaveModal()" class="bg-orange-500 text-white px-4 py-2 rounded hover:bg-orange-600 transition">
-                            <i class="fas fa-paper-plane mr-1"></i> Leave Request
+                            <i class="fas fa-paper-plane mr-1"></i> New Leave Request
                         </button>
                     </div>
                     <div class="overflow-x-auto">
                         <table class="w-full text-left">
-                            <thead class="bg-gray-50 text-gray-500 uppercase text-[10px] font-black">
+                            <thead class="bg-gray-50 text-gray-500 uppercase text-[10px] font-black tracking-widest">
                                 <tr>
-                                    <th class="p-4">Staff</th>
-                                    <th class="p-4">Date Range</th>
+                                    <th class="p-4">Staff Member</th>
+                                    <th class="p-4">Period</th>
                                     <th class="p-4">Reason</th>
                                     <th class="p-4 text-center">Status</th>
                                     <th class="p-4 text-center admin-only">Moderation</th>
@@ -187,42 +182,33 @@
 
     <div id="leave-modal" class="fixed inset-0 bg-black/50 hidden flex items-center justify-center z-50 p-4">
         <div class="bg-white p-6 rounded-xl max-w-md w-full shadow-2xl">
-            <h3 class="text-xl font-bold mb-4 text-indigo-800">New Leave Application</h3>
+            <h3 class="text-xl font-bold mb-4 text-indigo-800">Submit Leave Request</h3>
             <form id="leave-form" class="space-y-4">
                 <div class="grid grid-cols-2 gap-4">
-                    <div>
-                        <label class="block text-[10px] font-bold text-gray-400 uppercase mb-1">Start Date</label>
-                        <input type="date" id="leave-start" class="w-full p-2 border rounded outline-none" required>
-                    </div>
-                    <div>
-                        <label class="block text-[10px] font-bold text-gray-400 uppercase mb-1">End Date</label>
-                        <input type="date" id="leave-end" class="w-full p-2 border rounded outline-none" required>
-                    </div>
+                    <input type="date" id="leave-start" class="w-full p-2 border rounded focus:ring-1 focus:ring-indigo-500 outline-none" required>
+                    <input type="date" id="leave-end" class="w-full p-2 border rounded focus:ring-1 focus:ring-indigo-500 outline-none" required>
                 </div>
-                <div>
-                    <label class="block text-[10px] font-bold text-gray-400 uppercase mb-1">Purpose of Absence</label>
-                    <textarea id="leave-reason" class="w-full p-2 border rounded outline-none" rows="3" placeholder="Briefly explain..." required></textarea>
-                </div>
-                <div class="flex justify-end space-x-2">
+                <textarea id="leave-reason" class="w-full p-2 border rounded focus:ring-1 focus:ring-indigo-500 outline-none" rows="3" placeholder="Purpose of leave..." required></textarea>
+                <div class="flex justify-end space-x-3 pt-2">
                     <button type="button" onclick="closeLeaveModal()" class="px-4 py-2 border rounded hover:bg-gray-100 transition">Cancel</button>
-                    <button type="submit" class="px-4 py-2 bg-indigo-600 text-white rounded hover:bg-indigo-700 shadow-md">Send Request</button>
+                    <button type="submit" class="px-4 py-2 bg-indigo-600 text-white rounded hover:bg-indigo-700 shadow-md">Submit Request</button>
                 </div>
             </form>
         </div>
     </div>
 
-    <!-- MAIN LOGIC -->
     <script>
         const API_BASE = 'http://localhost:8080/api';
         let statusChart, trendChart;
         let employeeIdToDelete = null;
+        let myProfileRecord = null; // KEY: Links logged-in user to their Employee ID for DB storage
 
         const getAuthHeaders = () => ({
             'Content-Type': 'application/json',
             'Authorization': `Basic ${localStorage.getItem('auth_token')}`
         });
 
-        const checkSession = () => {
+        const checkSession = async () => {
             const token = localStorage.getItem('auth_token');
             const user = localStorage.getItem('username');
             const role = localStorage.getItem('user_role') || 'EMPLOYEE';
@@ -235,11 +221,14 @@
                 
                 if (role === 'ADMIN') {
                     document.body.classList.add('is-admin');
-                    document.getElementById('leave-header').textContent = "Global Leave Oversight";
+                    document.getElementById('leave-header').textContent = "Company-Wide Leave Requests";
                 } else {
                     document.body.classList.remove('is-admin');
-                    document.getElementById('leave-header').textContent = "My Personal Requests";
+                    document.getElementById('leave-header').textContent = "My Applications History";
                 }
+
+                // CRITICAL: Immediately identify the employee profile in DB
+                await syncMyIdentity();
                 showSection('analytics');
             }
         };
@@ -266,10 +255,8 @@
                     localStorage.setItem('username', u);
                     localStorage.setItem('user_role', role);
                     checkSession();
-                } else {
-                    showError("Authentication Failed: Check credentials.");
-                }
-            } catch (err) { showError("Server Unreachable: Port 8080"); }
+                } else { showError("Authentication Failed: Check credentials."); }
+            } catch (err) { showError("Server Error: Check port 8080."); }
         });
 
         document.getElementById('registerForm').addEventListener('submit', async (e) => {
@@ -288,7 +275,7 @@
                 if (res.ok) {
                     document.getElementById('successMessage').classList.remove('hidden');
                     setTimeout(() => toggleAuth(false), 2000);
-                } else { showError("Registration Error: ID/Username exists."); }
+                } else { showError("Registration Failed: Username might be taken."); }
             } catch (err) { showError("API Error: Register endpoint missing."); }
         });
 
@@ -312,22 +299,41 @@
             if (id === 'analytics') renderAnalytics();
         };
 
+        // --- IDENTITY MANAGEMENT ---
+        const syncMyIdentity = async () => {
+            try {
+                const res = await fetch(`${API_BASE}/employees`, { headers: getAuthHeaders() });
+                const employees = await res.json();
+                const user = localStorage.getItem('username').toLowerCase();
+                
+                // Match logged in user to their record via name or email prefix
+                myProfileRecord = employees.find(e => 
+                    e.firstName.toLowerCase() === user || 
+                    e.email.toLowerCase().includes(user)
+                );
+            } catch (e) { console.error("Identity sync failed", e); }
+        };
+
         // --- EMPLOYEE CRUD ---
         const fetchEmployees = async () => {
-            const res = await fetch(`${API_BASE}/employees`, { headers: getAuthHeaders() });
-            const data = await res.json();
-            const isAdmin = localStorage.getItem('user_role') === 'ADMIN';
-            document.getElementById('employee-table-body').innerHTML = data.map(emp => `
-                <tr class="hover:bg-indigo-50/30 transition">
-                    <td class="p-4 font-bold text-gray-900">${emp.firstName} ${emp.lastName}</td>
-                    <td class="p-4 text-gray-500 font-medium">${emp.email}</td>
-                    <td class="p-4 italic text-xs">${emp.position || 'Associate'}</td>
-                    <td class="p-4 text-center ${isAdmin ? '' : 'hidden'}">
-                        <button onclick="editEmployee(${emp.id}, '${emp.firstName}', '${emp.lastName}', '${emp.email}', '${emp.position}')" class="text-indigo-600 hover:scale-125 transition mx-2"><i class="fas fa-edit"></i></button>
-                        <button onclick="askDelete(${emp.id})" class="text-red-400 hover:scale-125 transition mx-2"><i class="fas fa-trash"></i></button>
-                    </td>
-                </tr>
-            `).join('');
+            try {
+                const res = await fetch(`${API_BASE}/employees`, { headers: getAuthHeaders() });
+                const data = await res.json();
+                const isAdmin = localStorage.getItem('user_role') === 'ADMIN';
+                
+                document.getElementById('employee-table-body').innerHTML = data.map(emp => `
+                    <tr class="hover:bg-indigo-50/30 transition border-b border-gray-50 last:border-0">
+                        <td class="p-4 font-bold text-gray-900">${emp.firstName} ${emp.lastName} ${myProfileRecord?.id === emp.id ? '<span class="text-[8px] bg-indigo-100 text-indigo-600 px-1 rounded ml-1">You</span>' : ''}</td>
+                        <td class="p-4 text-gray-500 font-medium">${emp.email}</td>
+                        <td class="p-4 italic text-gray-400 text-xs">${emp.position || 'Associate'}</td>
+                        <td class="p-4 text-center ${isAdmin ? '' : 'hidden'}">
+                            <button onclick="editEmployee(${emp.id}, '${emp.firstName}', '${emp.lastName}', '${emp.email}', '${emp.position}')" class="text-indigo-600 hover:text-indigo-900 mx-2 transition p-1" title="Edit"><i class="fas fa-edit"></i></button>
+                            <button onclick="askDelete(${emp.id})" class="text-red-400 hover:text-red-600 mx-2 transition p-1" title="Delete"><i class="fas fa-trash-alt"></i></button>
+                        </td>
+                    </tr>
+                `).join('');
+                return data;
+            } catch (e) { return []; }
         };
 
         const toggleEmployeeForm = () => document.getElementById('employee-form-container').classList.toggle('hidden');
@@ -344,11 +350,16 @@
             const method = id ? 'PUT' : 'POST';
             const url = id ? `${API_BASE}/employees/${id}` : `${API_BASE}/employees`;
 
-            await fetch(url, { method, headers: getAuthHeaders(), body: JSON.stringify(payload) });
-            document.getElementById('employee-form').reset();
-            document.getElementById('employee-id').value = '';
-            toggleEmployeeForm();
-            fetchEmployees();
+            try {
+                const res = await fetch(url, { method, headers: getAuthHeaders(), body: JSON.stringify(payload) });
+                if (res.ok) {
+                    document.getElementById('employee-form').reset();
+                    document.getElementById('employee-id').value = '';
+                    toggleEmployeeForm();
+                    await syncMyIdentity(); // Re-sync in case profile was updated
+                    fetchEmployees();
+                }
+            } catch (err) { console.error(err); }
         });
 
         window.editEmployee = (id, f, l, e, p) => {
@@ -375,38 +386,43 @@
             }
         });
 
-        // --- LEAVE CRUD ---
+        // --- LEAVE MODULE (Fixed Naming & Filtering) ---
         const fetchLeaves = async () => {
-            const res = await fetch(`${API_BASE}/leaves`, { headers: getAuthHeaders() });
-            let data = await res.json();
-            const role = localStorage.getItem('user_role');
-            const user = localStorage.getItem('username').toLowerCase();
+            try {
+                const res = await fetch(`${API_BASE}/leaves`, { headers: getAuthHeaders() });
+                let data = await res.json();
+                const role = localStorage.getItem('user_role');
 
-            if (role !== 'ADMIN') {
-                data = data.filter(l => l.employee && (l.employee.firstName.toLowerCase() === user || l.employee.email.split('@')[0] === user));
-            }
+                // 3. VISIBILITY FIX: Show own requests regardless of status
+                if (role !== 'ADMIN' && myProfileRecord) {
+                    data = data.filter(l => l.employee && l.employee.id === myProfileRecord.id);
+                }
 
-            document.getElementById('leave-table-body').innerHTML = data.map(l => `
-                <tr class="hover:bg-orange-50/30 transition border-b border-gray-50 last:border-0">
-                    <td class="p-4 font-bold text-gray-800">${l.employee?.firstName || 'System'}</td>
-                    <td class="p-4 text-xs font-mono text-gray-400">${l.startDate} to ${l.endDate}</td>
-                    <td class="p-4 italic text-gray-500 text-xs">"${l.reason}"</td>
-                    <td class="p-4 text-center">
-                        <span class="px-2 py-1 rounded-full text-[9px] font-black uppercase ${getStatusStyle(l.status)}">${l.status}</span>
-                    </td>
-                    <td class="p-4 text-center ${role === 'ADMIN' ? '' : 'hidden'}">
-                        <button onclick="setLeaveStatus(${l.id}, 'APPROVED')" class="text-green-500 hover:scale-125 transition mx-1"><i class="fas fa-check-circle"></i></button>
-                        <button onclick="setLeaveStatus(${l.id}, 'REJECTED')" class="text-red-400 hover:scale-125 transition mx-1"><i class="fas fa-times-circle"></i></button>
-                    </td>
-                </tr>
-            `).join('');
-            return data;
+                document.getElementById('leave-table-body').innerHTML = data.length === 0 ? '<tr><td colspan="5" class="p-8 text-center text-gray-300 italic text-xs">No leave requests recorded</td></tr>' : 
+                data.map(l => `
+                    <tr class="hover:bg-gray-50 border-b border-gray-50 last:border-0 transition">
+                        <td class="p-4 font-bold text-gray-800 text-xs">
+                            ${l.employee ? (l.employee.firstName + ' ' + l.employee.lastName) : '<span class="text-red-400">System (Unlinked)</span>'}
+                        </td>
+                        <td class="p-4 text-xs font-mono text-gray-400">${l.startDate} to ${l.endDate}</td>
+                        <td class="p-4 italic text-gray-500 text-xs">"${l.reason}"</td>
+                        <td class="p-4 text-center">
+                            <span class="px-2 py-0.5 rounded-full text-[8px] font-black uppercase tracking-tighter ${getStatusStyle(l.status)}">${l.status}</span>
+                        </td>
+                        <td class="p-4 text-center ${role === 'ADMIN' ? '' : 'hidden'}">
+                            <button onclick="setLeaveStatus(${l.id}, 'APPROVED')" class="text-green-500 hover:scale-125 transition mx-1" title="Approve"><i class="fas fa-check-circle"></i></button>
+                            <button onclick="setLeaveStatus(${l.id}, 'REJECTED')" class="text-red-400 hover:scale-125 transition mx-1" title="Reject"><i class="fas fa-times-circle"></i></button>
+                        </td>
+                    </tr>
+                `).join('');
+                return data;
+            } catch (e) { return []; }
         };
 
         const getStatusStyle = (s) => {
-            if (s === 'APPROVED') return 'bg-green-100 text-green-700 border border-green-200';
-            if (s === 'REJECTED') return 'bg-red-100 text-red-700 border border-red-200';
-            return 'bg-orange-100 text-orange-700 border border-orange-200';
+            if (s === 'APPROVED') return 'bg-green-100 text-green-700';
+            if (s === 'REJECTED') return 'bg-red-100 text-red-700';
+            return 'bg-orange-100 text-orange-700';
         };
 
         window.setLeaveStatus = async (id, status) => {
@@ -419,14 +435,34 @@
 
         document.getElementById('leave-form').addEventListener('submit', async (e) => {
             e.preventDefault();
+            
+            // 1 & 2. DB STORAGE FIX: Attach full myProfileRecord (which contains ID) to payload
+            if (!myProfileRecord && localStorage.getItem('user_role') !== 'ADMIN') {
+                alert("Identity error: You are not correctly linked to an Employee record. Please contact Admin.");
+                return;
+            }
+
             const payload = {
                 startDate: document.getElementById('leave-start').value,
                 endDate: document.getElementById('leave-end').value,
-                reason: document.getElementById('leave-reason').value
+                reason: document.getElementById('leave-reason').value,
+                status: 'PENDING',
+                employee: myProfileRecord // This sends the ID and metadata needed for proper DB storage
             };
-            await fetch(`${API_BASE}/leaves`, { method: 'POST', headers: getAuthHeaders(), body: JSON.stringify(payload) });
-            closeLeaveModal();
-            fetchLeaves();
+
+            const res = await fetch(`${API_BASE}/leaves`, { 
+                method: 'POST', 
+                headers: getAuthHeaders(), 
+                body: JSON.stringify(payload) 
+            });
+
+            if (res.ok) {
+                closeLeaveModal();
+                fetchLeaves();
+                document.getElementById('leave-form').reset();
+            } else {
+                alert("Submission failed. Check your network connection.");
+            }
         });
 
         // --- ANALYTICS ---
@@ -434,35 +470,22 @@
             const leaves = await fetchLeaves();
             const stats = { PENDING: 0, APPROVED: 0, REJECTED: 0 };
             const monthlyData = new Array(12).fill(0);
-
             leaves.forEach(l => {
                 if (stats[l.status] !== undefined) stats[l.status]++;
                 const m = new Date(l.startDate).getMonth();
-                if (m >= 0) monthlyData[m]++;
+                if (m >= 0 && m < 12) monthlyData[m]++;
             });
 
             if (statusChart) statusChart.destroy();
             statusChart = new Chart(document.getElementById('leaveStatusChart'), {
-                type: 'doughnut',
-                data: {
-                    labels: ['Pending', 'Approved', 'Rejected'],
-                    datasets: [{ data: [stats.PENDING, stats.APPROVED, stats.REJECTED], backgroundColor: ['#f59e0b', '#10b981', '#ef4444'], borderWidth: 0 }]
-                },
+                type: 'doughnut', data: { labels: ['Pending', 'Approved', 'Rejected'], datasets: [{ data: [stats.PENDING, stats.APPROVED, stats.REJECTED], backgroundColor: ['#f59e0b', '#10b981', '#ef4444'], borderWidth: 0 }] },
                 options: { maintainAspectRatio: false, plugins: { legend: { position: 'bottom' } } }
             });
 
             if (trendChart) trendChart.destroy();
             trendChart = new Chart(document.getElementById('leaveTrendChart'), {
-                type: 'bar',
-                data: {
-                    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
-                    datasets: [{ label: 'Total Requests', data: monthlyData, backgroundColor: '#6366f1', borderRadius: 4 }]
-                },
-                options: { 
-                    maintainAspectRatio: false, 
-                    scales: { y: { beginAtZero: true, grid: { display: false }, ticks: { stepSize: 1 } }, x: { grid: { display: false } } },
-                    plugins: { legend: { display: false } }
-                }
+                type: 'bar', data: { labels: ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'], datasets: [{ label: 'Requests', data: monthlyData, backgroundColor: '#6366f1', borderRadius: 4 }] },
+                options: { maintainAspectRatio: false, scales: { y: { beginAtZero: true, grid: { display: false }, ticks: { stepSize: 1 } }, x: { grid: { display: false } } } }
             });
         };
 
