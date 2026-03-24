@@ -7,160 +7,203 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-      <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
-        body { font-family: 'Inter', sans-serif; transition: background 0.3s; }
-        .content-section { display: none; }
-        .content-section.active { display: block; animation: fadeIn 0.3s ease; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-        
-        .admin-only { display: none; } 
-        body.is-admin .admin-only { display: block; }
-        body.is-admin .admin-inline { display: inline-block; }
-        .admin-inline { display: none; }
-    </style>
+    <link rel="stylesheet" href="style.css">
+    <script src="config.js"></script>
+    <script src="utils.js"></script>
+    <script src="cache.js"></script>
+    <script src="script.js" defer></script>
 </head>
 <body class="bg-gray-50 min-h-screen">
 
     <!-- AUTHENTICATION VIEW -->
-    <div id="login-view" class="bg-indigo-900 min-h-screen flex items-center justify-center p-6">
+    <div id="login-view" class="bg-indigo-900 min-h-screen flex items-center justify-center p-6" role="main" aria-labelledby="auth-title">
         <div class="bg-white w-full max-w-md rounded-2xl shadow-2xl overflow-hidden">
             <div class="p-8 text-center">
-                <div class="inline-flex items-center justify-center w-16 h-16 bg-indigo-100 text-indigo-600 rounded-full mb-4">
-                    <i id="auth-icon" class="fas fa-lock text-2xl"></i>
+                <div class="inline-flex items-center justify-center w-16 h-16 bg-indigo-100 text-indigo-600 rounded-full mb-4" id="auth-icon" aria-hidden="true">
+                    <i class="fas fa-lock text-2xl"></i>
                 </div>
                 <h1 id="auth-title" class="text-3xl font-bold text-gray-800">Welcome Back</h1>
                 <p id="auth-subtitle" class="text-gray-500 mt-2 text-sm uppercase tracking-wide">Secure Access Terminal</p>
-                
-                <form id="loginForm" class="mt-8 space-y-4 text-left">
-                    <input type="text" id="username" placeholder="Username" class="w-full p-3 border rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none" required>
-                    <input type="password" id="password" placeholder="Password" class="w-full p-3 border rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none" required>
-                    <button type="submit" class="w-full bg-indigo-600 text-white py-3 rounded-lg font-bold hover:bg-indigo-700 transition shadow-lg">Sign In</button>
-                    <p class="text-sm text-gray-500 mt-4 text-center">New employee? <a href="#" onclick="toggleAuth(true)" class="text-indigo-600 font-bold hover:underline">Register here</a></p>
-                </form>
 
-                <form id="registerForm" class="mt-8 space-y-4 text-left hidden">
-                    <div class="grid grid-cols-2 gap-3">
-                        <input type="text" id="reg-firstName" placeholder="First Name" class="w-full p-3 border rounded-lg outline-none" required>
-                        <input type="text" id="reg-lastName" placeholder="Last Name" class="w-full p-3 border rounded-lg outline-none" required>
+                <form id="loginForm" class="mt-8 space-y-4 text-left" role="form" aria-labelledby="auth-title">
+                    <div>
+                        <label for="username" class="block text-sm font-medium text-gray-700 mb-1">Username</label>
+                        <input type="text" id="username" placeholder="Username" class="w-full p-3 border rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none" required aria-describedby="username-error">
                     </div>
-                    <input type="email" id="reg-email" placeholder="Email Address" class="w-full p-3 border rounded-lg outline-none" required>
-                    <input type="text" id="reg-username" placeholder="Desired Username" class="w-full p-3 border rounded-lg outline-none" required>
-                    <input type="password" id="reg-password" placeholder="Create Password" class="w-full p-3 border rounded-lg outline-none" required>
-                    <button type="submit" class="w-full bg-green-600 text-white py-3 rounded-lg font-bold hover:bg-green-700 transition">Create Account</button>
-                    <p class="text-sm text-gray-500 mt-4 text-center">Registered? <a href="#" onclick="toggleAuth(false)" class="text-indigo-600 font-bold hover:underline">Sign in instead</a></p>
+                    <div>
+                        <label for="password" class="block text-sm font-medium text-gray-700 mb-1">Password</label>
+                        <input type="password" id="password" placeholder="Password" class="w-full p-3 border rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none" required aria-describedby="password-error">
+                    </div>
+                    <button type="submit" class="w-full bg-indigo-600 text-white py-3 rounded-lg font-bold hover:bg-indigo-700 transition shadow-lg focus-ring">
+                        <i class="fas fa-sign-in-alt mr-2" aria-hidden="true"></i>Sign In
+                    </button>
+                    <p class="text-sm text-gray-500 mt-4 text-center">
+                        New employee?
+                        <a href="#" onclick="toggleAuth(true)" class="text-indigo-600 font-bold hover:underline focus-ring" aria-label="Switch to registration form">Register here</a>
+                    </p>
                 </form>
 
-                <div id="errorMessage" class="hidden text-red-500 text-sm mt-4 text-center bg-red-50 p-2 rounded border border-red-100"></div>
-                <div id="successMessage" class="hidden text-green-600 text-sm mt-4 text-center bg-green-50 p-2 rounded border border-green-100">Account created! Redirecting...</div>
+                <form id="registerForm" class="mt-8 space-y-4 text-left hidden" role="form" aria-labelledby="auth-title">
+                    <div class="grid grid-cols-2 gap-3">
+                        <div>
+                            <label for="reg-firstName" class="block text-sm font-medium text-gray-700 mb-1">First Name</label>
+                            <input type="text" id="reg-firstName" placeholder="First Name" class="w-full p-3 border rounded-lg outline-none" required>
+                        </div>
+                        <div>
+                            <label for="reg-lastName" class="block text-sm font-medium text-gray-700 mb-1">Last Name</label>
+                            <input type="text" id="reg-lastName" placeholder="Last Name" class="w-full p-3 border rounded-lg outline-none" required>
+                        </div>
+                    </div>
+                    <div>
+                        <label for="reg-email" class="block text-sm font-medium text-gray-700 mb-1">Email Address</label>
+                        <input type="email" id="reg-email" placeholder="Email Address" class="w-full p-3 border rounded-lg outline-none" required>
+                    </div>
+                    <div>
+                        <label for="reg-username" class="block text-sm font-medium text-gray-700 mb-1">Desired Username</label>
+                        <input type="text" id="reg-username" placeholder="Desired Username" class="w-full p-3 border rounded-lg outline-none" required>
+                    </div>
+                    <div>
+                        <label for="reg-password" class="block text-sm font-medium text-gray-700 mb-1">Create Password</label>
+                        <input type="password" id="reg-password" placeholder="Create Password" class="w-full p-3 border rounded-lg outline-none" required>
+                    </div>
+                    <button type="submit" class="w-full bg-green-600 text-white py-3 rounded-lg font-bold hover:bg-green-700 transition focus-ring">
+                        <i class="fas fa-user-plus mr-2" aria-hidden="true"></i>Create Account
+                    </button>
+                    <p class="text-sm text-gray-500 mt-4 text-center">
+                        Registered?
+                        <a href="#" onclick="toggleAuth(false)" class="text-indigo-600 font-bold hover:underline focus-ring" aria-label="Switch to login form">Sign in instead</a>
+                    </p>
+                </form>
+
+                <div id="errorMessage" class="hidden text-red-500 text-sm mt-4 text-center bg-red-50 p-2 rounded border border-red-100" role="alert" aria-live="assertive"></div>
+                <div id="successMessage" class="hidden text-green-600 text-sm mt-4 text-center bg-green-50 p-2 rounded border border-green-100" role="status" aria-live="polite">Account created! Redirecting...</div>
             </div>
         </div>
     </div>
 
     <!-- MAIN DASHBOARD VIEW -->
-    <div id="dashboard-view" class="hidden flex">
-        <aside class="w-64 bg-indigo-900 text-white min-h-screen p-4 fixed">
-            <h1 class="text-2xl font-bold mb-8 flex items-center"><i class="fas fa-shield-alt mr-2"></i> EMS Pro</h1>
+    <div id="dashboard-view" class="hidden flex" role="main" aria-label="Employee Management Dashboard">
+        <aside class="w-64 bg-indigo-900 text-white min-h-screen p-4 fixed" role="navigation" aria-label="Main navigation">
+            <h1 class="text-2xl font-bold mb-8 flex items-center">
+                <i class="fas fa-shield-alt mr-2" aria-hidden="true"></i> EMS Pro
+            </h1>
             <nav class="space-y-2">
-                <button onclick="showSection('analytics')" id="nav-analytics" class="nav-link w-full text-left p-3 hover:bg-indigo-700 rounded transition flex items-center">
-                    <i class="fas fa-chart-pie mr-3"></i> Analytics
+                <button onclick="showSection('analytics')" id="nav-analytics" class="nav-link w-full text-left p-3 hover:bg-indigo-700 rounded transition flex items-center focus-ring" aria-current="page">
+                    <i class="fas fa-chart-pie mr-3" aria-hidden="true"></i> Analytics
                 </button>
-                <button onclick="showSection('employees')" id="nav-employees" class="nav-link w-full text-left p-3 hover:bg-indigo-700 rounded transition flex items-center">
-                    <i class="fas fa-user-friends mr-3"></i> Staff Directory
+                <button onclick="showSection('employees')" id="nav-employees" class="nav-link w-full text-left p-3 hover:bg-indigo-700 rounded transition flex items-center focus-ring">
+                    <i class="fas fa-user-friends mr-3" aria-hidden="true"></i> Staff Directory
                 </button>
-                <button onclick="showSection('leaves')" id="nav-leaves" class="nav-link w-full text-left p-3 hover:bg-indigo-700 rounded transition flex items-center">
-                    <i class="fas fa-calendar-check mr-3"></i> Leave Center
+                <button onclick="showSection('leaves')" id="nav-leaves" class="nav-link w-full text-left p-3 hover:bg-indigo-700 rounded transition flex items-center focus-ring">
+                    <i class="fas fa-calendar-check mr-3" aria-hidden="true"></i> Leave Center
                 </button>
             </nav>
-            <button onclick="logout()" class="absolute bottom-4 left-4 right-4 bg-red-600 p-2 rounded hover:bg-red-700 transition">
-                <i class="fas fa-sign-out-alt mr-2"></i> Logout
+            <button onclick="logout()" class="absolute bottom-4 left-4 right-4 bg-red-600 p-2 rounded hover:bg-red-700 transition focus-ring" aria-label="Logout">
+                <i class="fas fa-sign-out-alt mr-2" aria-hidden="true"></i> Logout
             </button>
         </aside>
 
-        <main class="flex-1 ml-64 p-8">
+        <main class="flex-1 ml-64 p-8" role="main">
             <header class="flex justify-between items-center mb-8 bg-white p-6 rounded-xl shadow-sm border border-gray-100">
                 <h2 id="section-title" class="text-2xl font-bold text-gray-800 tracking-tight">Dashboard</h2>
                 <div class="text-right">
                     <p class="text-gray-400 text-[10px] uppercase font-bold tracking-widest mb-1">Session Identity</p>
-                    <span class="text-indigo-600 font-black uppercase text-sm"><span id="display-username">User</span> <span id="role-badge" class="ml-2 px-2 py-0.5 bg-indigo-100 rounded text-[10px]"></span></span>
+                    <span class="text-indigo-600 font-black uppercase text-sm">
+                        <span id="display-username">User</span>
+                        <span id="role-badge" class="ml-2 px-2 py-0.5 bg-indigo-100 rounded text-[10px]"></span>
+                    </span>
                 </div>
             </header>
 
             <!-- Analytics Section -->
-            <div id="section-analytics" class="content-section active">
+            <div id="section-analytics" class="content-section active" role="region" aria-labelledby="analytics-heading">
+                <h3 id="analytics-heading" class="sr-only">Analytics Dashboard</h3>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
                     <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100 h-80">
                         <h3 class="font-bold text-gray-700 mb-4 uppercase text-xs tracking-wider">Leave Distribution</h3>
-                        <canvas id="leaveStatusChart"></canvas>
+                        <canvas id="leaveStatusChart" role="img" aria-label="Doughnut chart showing leave request status distribution"></canvas>
                     </div>
                     <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100 h-80">
                         <h3 class="font-bold text-gray-700 mb-4 uppercase text-xs tracking-wider">Request Volume (Monthly)</h3>
-                        <canvas id="leaveTrendChart"></canvas>
+                        <canvas id="leaveTrendChart" role="img" aria-label="Bar chart showing monthly leave request volume"></canvas>
                     </div>
                 </div>
             </div>
 
             <!-- Staff Directory Section -->
-            <div id="section-employees" class="content-section">
+            <div id="section-employees" class="content-section" role="region" aria-labelledby="employees-heading">
                 <section class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
                     <div class="p-6 border-b border-gray-100 flex justify-between items-center">
-                        <h3 class="font-bold text-gray-800 text-lg">Staff Directory</h3>
-                        <button onclick="toggleEmployeeForm()" class="admin-only bg-indigo-600 text-white px-4 py-2 rounded hover:bg-indigo-700 transition">
-                            <i class="fas fa-plus mr-1"></i> Add Employee
+                        <h3 id="employees-heading" class="font-bold text-gray-800 text-lg">Staff Directory</h3>
+                        <button onclick="toggleEmployeeForm()" class="admin-only bg-indigo-600 text-white px-4 py-2 rounded hover:bg-indigo-700 transition focus-ring" aria-expanded="false" aria-controls="employee-form-container">
+                            <i class="fas fa-plus mr-1" aria-hidden="true"></i> Add Employee
                         </button>
                     </div>
 
-                    <div id="employee-form-container" class="hidden p-6 bg-gray-50 border-b">
-                        <form id="employee-form" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div id="employee-form-container" class="hidden p-6 bg-gray-50 border-b" role="region" aria-labelledby="employee-form-heading">
+                        <h4 id="employee-form-heading" class="sr-only">Employee Form</h4>
+                        <form id="employee-form" class="grid grid-cols-1 md:grid-cols-2 gap-4" role="form" aria-labelledby="employee-form-heading">
                             <input type="hidden" id="employee-id">
-                            <input type="text" id="firstName" placeholder="First Name" class="p-2 border rounded focus:ring-1 focus:ring-indigo-400 outline-none" required>
-                            <input type="text" id="lastName" placeholder="Last Name" class="p-2 border rounded focus:ring-1 focus:ring-indigo-400 outline-none" required>
-                            <input type="email" id="email" placeholder="Email Address" class="p-2 border rounded focus:ring-1 focus:ring-indigo-400 outline-none" required>
-                            <input type="text" id="position" placeholder="Job Title" class="p-2 border rounded focus:ring-1 focus:ring-indigo-400 outline-none">
+                            <div>
+                                <label for="firstName" class="block text-sm font-medium text-gray-700 mb-1">First Name</label>
+                                <input type="text" id="firstName" placeholder="First Name" class="p-2 border rounded focus:ring-1 focus:ring-indigo-400 outline-none" required>
+                            </div>
+                            <div>
+                                <label for="lastName" class="block text-sm font-medium text-gray-700 mb-1">Last Name</label>
+                                <input type="text" id="lastName" placeholder="Last Name" class="p-2 border rounded focus:ring-1 focus:ring-indigo-400 outline-none" required>
+                            </div>
+                            <div class="md:col-span-2">
+                                <label for="email" class="block text-sm font-medium text-gray-700 mb-1">Email Address</label>
+                                <input type="email" id="email" placeholder="Email Address" class="p-2 border rounded focus:ring-1 focus:ring-indigo-400 outline-none" required>
+                            </div>
+                            <div class="md:col-span-2">
+                                <label for="position" class="block text-sm font-medium text-gray-700 mb-1">Job Title</label>
+                                <input type="text" id="position" placeholder="Job Title" class="p-2 border rounded focus:ring-1 focus:ring-indigo-400 outline-none">
+                            </div>
                             <div class="md:col-span-2 flex justify-end space-x-2 pt-2">
-                                <button type="button" onclick="toggleEmployeeForm()" class="px-4 py-2 border rounded hover:bg-gray-200 transition">Cancel</button>
-                                <button type="submit" class="px-4 py-2 bg-indigo-600 text-white rounded hover:bg-indigo-700 shadow-md">Save Changes</button>
+                                <button type="button" onclick="toggleEmployeeForm()" class="px-4 py-2 border rounded hover:bg-gray-200 transition focus-ring">Cancel</button>
+                                <button type="submit" class="px-4 py-2 bg-indigo-600 text-white rounded hover:bg-indigo-700 shadow-md focus-ring">Save Changes</button>
                             </div>
                         </form>
                     </div>
 
                     <div class="overflow-x-auto">
-                        <table class="w-full text-left">
+                        <table class="w-full text-left" role="table" aria-label="Employee directory">
                             <thead class="bg-gray-50 text-gray-500 uppercase text-[10px] font-black tracking-widest">
-                                <tr>
-                                    <th class="p-4">Name</th>
-                                    <th class="p-4">Email</th>
-                                    <th class="p-4">Position</th>
-                                    <th class="p-4 text-center admin-only">Actions</th>
+                                <tr role="row">
+                                    <th class="p-4" role="columnheader" scope="col">Name</th>
+                                    <th class="p-4" role="columnheader" scope="col">Email</th>
+                                    <th class="p-4" role="columnheader" scope="col">Position</th>
+                                    <th class="p-4 text-center admin-only" role="columnheader" scope="col">Actions</th>
                                 </tr>
                             </thead>
-                            <tbody id="employee-table-body" class="divide-y divide-gray-100 text-sm text-gray-700"></tbody>
+                            <tbody id="employee-table-body" class="divide-y divide-gray-100 text-sm text-gray-700" role="rowgroup"></tbody>
                         </table>
                     </div>
                 </section>
             </div>
 
             <!-- Leave Center Section -->
-            <div id="section-leaves" class="content-section">
+            <div id="section-leaves" class="content-section" role="region" aria-labelledby="leaves-heading">
                 <section class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
                     <div class="p-6 border-b border-gray-100 flex justify-between items-center">
                         <h3 id="leave-header" class="font-bold text-gray-800 text-lg">Leave Status</h3>
-                        <button onclick="openLeaveModal()" class="bg-orange-500 text-white px-4 py-2 rounded hover:bg-orange-600 transition">
-                            <i class="fas fa-paper-plane mr-1"></i> New Leave Request
+                        <button onclick="openLeaveModal()" class="bg-orange-500 text-white px-4 py-2 rounded hover:bg-orange-600 transition focus-ring" aria-label="Open new leave request form">
+                            <i class="fas fa-paper-plane mr-1" aria-hidden="true"></i> New Leave Request
                         </button>
                     </div>
                     <div class="overflow-x-auto">
-                        <table class="w-full text-left">
+                        <table class="w-full text-left" role="table" aria-label="Leave requests">
                             <thead class="bg-gray-50 text-gray-500 uppercase text-[10px] font-black tracking-widest">
-                                <tr>
-                                    <th class="p-4">Staff Member</th>
-                                    <th class="p-4">Period</th>
-                                    <th class="p-4">Reason</th>
-                                    <th class="p-4 text-center">Status</th>
-                                    <th class="p-4 text-center admin-only">Moderation</th>
+                                <tr role="row">
+                                    <th class="p-4" role="columnheader" scope="col">Staff Member</th>
+                                    <th class="p-4" role="columnheader" scope="col">Period</th>
+                                    <th class="p-4" role="columnheader" scope="col">Reason</th>
+                                    <th class="p-4 text-center" role="columnheader" scope="col">Status</th>
+                                    <th class="p-4 text-center admin-only" role="columnheader" scope="col">Moderation</th>
                                 </tr>
                             </thead>
-                            <tbody id="leave-table-body" class="divide-y divide-gray-100 text-sm"></tbody>
+                            <tbody id="leave-table-body" class="divide-y divide-gray-100 text-sm" role="rowgroup"></tbody>
                         </table>
                     </div>
                 </section>
@@ -169,327 +212,40 @@
     </div>
 
     <!-- Modals -->
-    <div id="confirmation-modal" class="fixed inset-0 bg-black/50 hidden flex items-center justify-center z-50 p-4">
+    <div id="confirmation-modal" class="fixed inset-0 bg-black/50 hidden flex items-center justify-center z-50 p-4" role="dialog" aria-modal="true" aria-labelledby="confirm-title" aria-hidden="true">
         <div class="bg-white p-6 rounded-xl max-w-sm w-full shadow-2xl">
-            <h3 class="text-xl font-bold mb-4 text-gray-800">Confirm Deletion</h3>
+            <h3 id="confirm-title" class="text-xl font-bold mb-4 text-gray-800">Confirm Deletion</h3>
             <p class="text-gray-600 mb-6 text-sm">Are you sure you want to remove this employee profile?</p>
             <div class="flex justify-end space-x-3">
-                <button onclick="closeConfirmModal()" class="px-4 py-2 border rounded hover:bg-gray-100 transition">Cancel</button>
-                <button id="confirm-delete-btn" class="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700 transition">Delete</button>
+                <button onclick="closeConfirmModal()" id="cancel-delete-btn" class="px-4 py-2 border rounded hover:bg-gray-100 transition focus-ring">Cancel</button>
+                <button id="confirm-delete-btn" class="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700 transition focus-ring">Delete</button>
             </div>
         </div>
     </div>
 
-    <div id="leave-modal" class="fixed inset-0 bg-black/50 hidden flex items-center justify-center z-50 p-4">
+    <div id="leave-modal" class="fixed inset-0 bg-black/50 hidden flex items-center justify-center z-50 p-4" role="dialog" aria-modal="true" aria-labelledby="leave-modal-title" aria-hidden="true">
         <div class="bg-white p-6 rounded-xl max-w-md w-full shadow-2xl">
-            <h3 class="text-xl font-bold mb-4 text-indigo-800">Submit Leave Request</h3>
-            <form id="leave-form" class="space-y-4">
+            <h3 id="leave-modal-title" class="text-xl font-bold mb-4 text-indigo-800">Submit Leave Request</h3>
+            <form id="leave-form" class="space-y-4" role="form" aria-labelledby="leave-modal-title">
                 <div class="grid grid-cols-2 gap-4">
-                    <input type="date" id="leave-start" class="w-full p-2 border rounded focus:ring-1 focus:ring-indigo-500 outline-none" required>
-                    <input type="date" id="leave-end" class="w-full p-2 border rounded focus:ring-1 focus:ring-indigo-500 outline-none" required>
+                    <div>
+                        <label for="leave-start" class="block text-sm font-medium text-gray-700 mb-1">Start Date</label>
+                        <input type="date" id="leave-start" class="w-full p-2 border rounded focus:ring-1 focus:ring-indigo-500 outline-none" required>
+                    </div>
+                    <div>
+                        <label for="leave-end" class="block text-sm font-medium text-gray-700 mb-1">End Date</label>
+                        <input type="date" id="leave-end" class="w-full p-2 border rounded focus:ring-1 focus:ring-indigo-500 outline-none" required>
+                    </div>
                 </div>
-                <textarea id="leave-reason" class="w-full p-2 border rounded focus:ring-1 focus:ring-indigo-500 outline-none" rows="3" placeholder="Purpose of leave..." required></textarea>
+                <div>
+                    <label for="leave-reason" class="block text-sm font-medium text-gray-700 mb-1">Purpose of Leave</label>
+                    <textarea id="leave-reason" class="w-full p-2 border rounded focus:ring-1 focus:ring-indigo-500 outline-none" rows="3" placeholder="Purpose of leave..." required></textarea>
+                </div>
                 <div class="flex justify-end space-x-3 pt-2">
-                    <button type="button" onclick="closeLeaveModal()" class="px-4 py-2 border rounded hover:bg-gray-100 transition">Cancel</button>
-                    <button type="submit" class="px-4 py-2 bg-indigo-600 text-white rounded hover:bg-indigo-700 shadow-md">Submit Request</button>
+                    <button type="button" onclick="closeLeaveModal()" class="px-4 py-2 border rounded hover:bg-gray-100 transition focus-ring">Cancel</button>
+                    <button type="submit" class="px-4 py-2 bg-indigo-600 text-white rounded hover:bg-indigo-700 shadow-md focus-ring">Submit Request</button>
                 </div>
             </form>
         </div>
-    </div>
-
-    <script>
-        const API_BASE = 'http://localhost:8080/api';
-        let statusChart, trendChart;
-        let employeeIdToDelete = null;
-        let myProfileRecord = null; // KEY: Links logged-in user to their Employee ID for DB storage
-
-        const getAuthHeaders = () => ({
-            'Content-Type': 'application/json',
-            'Authorization': `Basic ${localStorage.getItem('auth_token')}`
-        });
-
-        const checkSession = async () => {
-            const token = localStorage.getItem('auth_token');
-            const user = localStorage.getItem('username');
-            const role = localStorage.getItem('user_role') || 'EMPLOYEE';
-
-            if (token) {
-                document.getElementById('login-view').classList.add('hidden');
-                document.getElementById('dashboard-view').classList.remove('hidden');
-                document.getElementById('display-username').textContent = user;
-                document.getElementById('role-badge').textContent = role;
-                
-                if (role === 'ADMIN') {
-                    document.body.classList.add('is-admin');
-                    document.getElementById('leave-header').textContent = "Company-Wide Leave Requests";
-                } else {
-                    document.body.classList.remove('is-admin');
-                    document.getElementById('leave-header').textContent = "My Applications History";
-                }
-
-                // CRITICAL: Immediately identify the employee profile in DB
-                await syncMyIdentity();
-                showSection('analytics');
-            }
-        };
-
-        const toggleAuth = (isRegister) => {
-            document.getElementById('loginForm').classList.toggle('hidden', isRegister);
-            document.getElementById('registerForm').classList.toggle('hidden', !isRegister);
-            document.getElementById('auth-title').textContent = isRegister ? "Join the Team" : "Welcome Back";
-            document.getElementById('auth-icon').className = isRegister ? "fas fa-user-plus text-2xl" : "fas fa-lock text-2xl";
-        };
-
-        // --- AUTH API ---
-        document.getElementById('loginForm').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const u = document.getElementById('username').value;
-            const p = document.getElementById('password').value;
-            const credentials = btoa(`${u}:${p}`);
-            
-            try {
-                const res = await fetch(`${API_BASE}/employees`, { headers: { 'Authorization': `Basic ${credentials}` } });
-                if (res.ok) {
-                    const role = u.toLowerCase().includes('admin') ? 'ADMIN' : 'EMPLOYEE';
-                    localStorage.setItem('auth_token', credentials);
-                    localStorage.setItem('username', u);
-                    localStorage.setItem('user_role', role);
-                    checkSession();
-                } else { showError("Authentication Failed: Check credentials."); }
-            } catch (err) { showError("Server Error: Check port 8080."); }
-        });
-
-        document.getElementById('registerForm').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const payload = {
-                firstName: document.getElementById('reg-firstName').value,
-                lastName: document.getElementById('reg-lastName').value,
-                email: document.getElementById('reg-email').value,
-                username: document.getElementById('reg-username').value,
-                password: document.getElementById('reg-password').value
-            };
-            try {
-                const res = await fetch(`${API_BASE}/auth/register`, {
-                    method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload)
-                });
-                if (res.ok) {
-                    document.getElementById('successMessage').classList.remove('hidden');
-                    setTimeout(() => toggleAuth(false), 2000);
-                } else { showError("Registration Failed: Username might be taken."); }
-            } catch (err) { showError("API Error: Register endpoint missing."); }
-        });
-
-        const showError = (msg) => {
-            const err = document.getElementById('errorMessage');
-            err.textContent = msg;
-            err.classList.remove('hidden');
-            setTimeout(() => err.classList.add('hidden'), 4000);
-        };
-
-        const logout = () => { localStorage.clear(); location.reload(); };
-
-        const showSection = (id) => {
-            document.querySelectorAll('.content-section').forEach(s => s.classList.remove('active'));
-            document.getElementById(`section-${id}`).classList.add('active');
-            document.querySelectorAll('.nav-link').forEach(l => l.classList.replace('bg-indigo-700', 'hover:bg-indigo-700'));
-            document.getElementById(`nav-${id}`).classList.replace('hover:bg-indigo-700', 'bg-indigo-700');
-            
-            if (id === 'employees') fetchEmployees();
-            if (id === 'leaves') fetchLeaves();
-            if (id === 'analytics') renderAnalytics();
-        };
-
-        // --- IDENTITY MANAGEMENT ---
-        const syncMyIdentity = async () => {
-            try {
-                const res = await fetch(`${API_BASE}/employees`, { headers: getAuthHeaders() });
-                const employees = await res.json();
-                const user = localStorage.getItem('username').toLowerCase();
-                
-                // Match logged in user to their record via name or email prefix
-                myProfileRecord = employees.find(e => 
-                    e.firstName.toLowerCase() === user || 
-                    e.email.toLowerCase().includes(user)
-                );
-            } catch (e) { console.error("Identity sync failed", e); }
-        };
-
-        // --- EMPLOYEE CRUD ---
-        const fetchEmployees = async () => {
-            try {
-                const res = await fetch(`${API_BASE}/employees`, { headers: getAuthHeaders() });
-                const data = await res.json();
-                const isAdmin = localStorage.getItem('user_role') === 'ADMIN';
-                
-                document.getElementById('employee-table-body').innerHTML = data.map(emp => `
-                    <tr class="hover:bg-indigo-50/30 transition border-b border-gray-50 last:border-0">
-                        <td class="p-4 font-bold text-gray-900">${emp.firstName} ${emp.lastName} ${myProfileRecord?.id === emp.id ? '<span class="text-[8px] bg-indigo-100 text-indigo-600 px-1 rounded ml-1">You</span>' : ''}</td>
-                        <td class="p-4 text-gray-500 font-medium">${emp.email}</td>
-                        <td class="p-4 italic text-gray-400 text-xs">${emp.position || 'Associate'}</td>
-                        <td class="p-4 text-center ${isAdmin ? '' : 'hidden'}">
-                            <button onclick="editEmployee(${emp.id}, '${emp.firstName}', '${emp.lastName}', '${emp.email}', '${emp.position}')" class="text-indigo-600 hover:text-indigo-900 mx-2 transition p-1" title="Edit"><i class="fas fa-edit"></i></button>
-                            <button onclick="askDelete(${emp.id})" class="text-red-400 hover:text-red-600 mx-2 transition p-1" title="Delete"><i class="fas fa-trash-alt"></i></button>
-                        </td>
-                    </tr>
-                `).join('');
-                return data;
-            } catch (e) { return []; }
-        };
-
-        const toggleEmployeeForm = () => document.getElementById('employee-form-container').classList.toggle('hidden');
-
-        document.getElementById('employee-form').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const id = document.getElementById('employee-id').value;
-            const payload = {
-                firstName: document.getElementById('firstName').value,
-                lastName: document.getElementById('lastName').value,
-                email: document.getElementById('email').value,
-                position: document.getElementById('position').value
-            };
-            const method = id ? 'PUT' : 'POST';
-            const url = id ? `${API_BASE}/employees/${id}` : `${API_BASE}/employees`;
-
-            try {
-                const res = await fetch(url, { method, headers: getAuthHeaders(), body: JSON.stringify(payload) });
-                if (res.ok) {
-                    document.getElementById('employee-form').reset();
-                    document.getElementById('employee-id').value = '';
-                    toggleEmployeeForm();
-                    await syncMyIdentity(); // Re-sync in case profile was updated
-                    fetchEmployees();
-                }
-            } catch (err) { console.error(err); }
-        });
-
-        window.editEmployee = (id, f, l, e, p) => {
-            document.getElementById('employee-id').value = id;
-            document.getElementById('firstName').value = f;
-            document.getElementById('lastName').value = l;
-            document.getElementById('email').value = e;
-            document.getElementById('position').value = p;
-            if (document.getElementById('employee-form-container').classList.contains('hidden')) toggleEmployeeForm();
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        };
-
-        window.askDelete = (id) => {
-            employeeIdToDelete = id;
-            document.getElementById('confirmation-modal').classList.remove('hidden');
-        };
-        window.closeConfirmModal = () => document.getElementById('confirmation-modal').classList.add('hidden');
-
-        document.getElementById('confirm-delete-btn').addEventListener('click', async () => {
-            if (employeeIdToDelete) {
-                await fetch(`${API_BASE}/employees/${employeeIdToDelete}`, { method: 'DELETE', headers: getAuthHeaders() });
-                closeConfirmModal();
-                fetchEmployees();
-            }
-        });
-
-        // --- LEAVE MODULE (Fixed Naming & Filtering) ---
-        const fetchLeaves = async () => {
-            try {
-                const res = await fetch(`${API_BASE}/leaves`, { headers: getAuthHeaders() });
-                let data = await res.json();
-                const role = localStorage.getItem('user_role');
-
-                // 3. VISIBILITY FIX: Show own requests regardless of status
-                if (role !== 'ADMIN' && myProfileRecord) {
-                    data = data.filter(l => l.employee && l.employee.id === myProfileRecord.id);
-                }
-
-                document.getElementById('leave-table-body').innerHTML = data.length === 0 ? '<tr><td colspan="5" class="p-8 text-center text-gray-300 italic text-xs">No leave requests recorded</td></tr>' : 
-                data.map(l => `
-                    <tr class="hover:bg-gray-50 border-b border-gray-50 last:border-0 transition">
-                        <td class="p-4 font-bold text-gray-800 text-xs">
-                            ${l.employee ? (l.employee.firstName + ' ' + l.employee.lastName) : '<span class="text-red-400">System (Unlinked)</span>'}
-                        </td>
-                        <td class="p-4 text-xs font-mono text-gray-400">${l.startDate} to ${l.endDate}</td>
-                        <td class="p-4 italic text-gray-500 text-xs">"${l.reason}"</td>
-                        <td class="p-4 text-center">
-                            <span class="px-2 py-0.5 rounded-full text-[8px] font-black uppercase tracking-tighter ${getStatusStyle(l.status)}">${l.status}</span>
-                        </td>
-                        <td class="p-4 text-center ${role === 'ADMIN' ? '' : 'hidden'}">
-                            <button onclick="setLeaveStatus(${l.id}, 'APPROVED')" class="text-green-500 hover:scale-125 transition mx-1" title="Approve"><i class="fas fa-check-circle"></i></button>
-                            <button onclick="setLeaveStatus(${l.id}, 'REJECTED')" class="text-red-400 hover:scale-125 transition mx-1" title="Reject"><i class="fas fa-times-circle"></i></button>
-                        </td>
-                    </tr>
-                `).join('');
-                return data;
-            } catch (e) { return []; }
-        };
-
-        const getStatusStyle = (s) => {
-            if (s === 'APPROVED') return 'bg-green-100 text-green-700';
-            if (s === 'REJECTED') return 'bg-red-100 text-red-700';
-            return 'bg-orange-100 text-orange-700';
-        };
-
-        window.setLeaveStatus = async (id, status) => {
-            await fetch(`${API_BASE}/leaves/${id}/status?status=${status}`, { method: 'PUT', headers: getAuthHeaders() });
-            fetchLeaves();
-        };
-
-        window.openLeaveModal = () => document.getElementById('leave-modal').classList.remove('hidden');
-        window.closeLeaveModal = () => document.getElementById('leave-modal').classList.add('hidden');
-
-        document.getElementById('leave-form').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            
-            // 1 & 2. DB STORAGE FIX: Attach full myProfileRecord (which contains ID) to payload
-            if (!myProfileRecord && localStorage.getItem('user_role') !== 'ADMIN') {
-                alert("Identity error: You are not correctly linked to an Employee record. Please contact Admin.");
-                return;
-            }
-
-            const payload = {
-                startDate: document.getElementById('leave-start').value,
-                endDate: document.getElementById('leave-end').value,
-                reason: document.getElementById('leave-reason').value,
-                status: 'PENDING',
-                employee: myProfileRecord // This sends the ID and metadata needed for proper DB storage
-            };
-
-            const res = await fetch(`${API_BASE}/leaves`, { 
-                method: 'POST', 
-                headers: getAuthHeaders(), 
-                body: JSON.stringify(payload) 
-            });
-
-            if (res.ok) {
-                closeLeaveModal();
-                fetchLeaves();
-                document.getElementById('leave-form').reset();
-            } else {
-                alert("Submission failed. Check your network connection.");
-            }
-        });
-
-        // --- ANALYTICS ---
-        const renderAnalytics = async () => {
-            const leaves = await fetchLeaves();
-            const stats = { PENDING: 0, APPROVED: 0, REJECTED: 0 };
-            const monthlyData = new Array(12).fill(0);
-            leaves.forEach(l => {
-                if (stats[l.status] !== undefined) stats[l.status]++;
-                const m = new Date(l.startDate).getMonth();
-                if (m >= 0 && m < 12) monthlyData[m]++;
-            });
-
-            if (statusChart) statusChart.destroy();
-            statusChart = new Chart(document.getElementById('leaveStatusChart'), {
-                type: 'doughnut', data: { labels: ['Pending', 'Approved', 'Rejected'], datasets: [{ data: [stats.PENDING, stats.APPROVED, stats.REJECTED], backgroundColor: ['#f59e0b', '#10b981', '#ef4444'], borderWidth: 0 }] },
-                options: { maintainAspectRatio: false, plugins: { legend: { position: 'bottom' } } }
-            });
-
-            if (trendChart) trendChart.destroy();
-            trendChart = new Chart(document.getElementById('leaveTrendChart'), {
-                type: 'bar', data: { labels: ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'], datasets: [{ label: 'Requests', data: monthlyData, backgroundColor: '#6366f1', borderRadius: 4 }] },
-                options: { maintainAspectRatio: false, scales: { y: { beginAtZero: true, grid: { display: false }, ticks: { stepSize: 1 } }, x: { grid: { display: false } } } }
-            });
-        };
-
-        checkSession();
-    </script>
 </body>
 </html>
