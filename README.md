@@ -10,14 +10,14 @@ The system features a Spring Boot backend with a MariaDB database and a sophisti
 
 ✨ Features
 -
-Secure Authentication: Multi-role login system (Admin & Employee) using Spring Security and BCrypt password hashing.
-Employee Directory: Full CRUD capabilities for staff records.
-Leave Management Center:
-Employees: Can submit leave requests with start/end dates and specific reasons.
-Admins: Can moderate (Approve/Reject) company-wide requests.
-Interactive Analytics: Data-driven dashboard visualizing leave distributions and monthly request trends.
-Advanced Frontend Logic: Features a client-side API caching layer, input sanitization for XSS prevention, and a modular utility system.
-Responsive Design: A sleek, indigo-themed interface that adapts perfectly to mobile, tablet, and desktop viewports.
+*Secure Authentication: Multi-role login system (Admin & Employee) using Spring Security and BCrypt password hashing.
+*Employee Directory: Full CRUD capabilities for staff records.
+*Leave Management Center:
+*Employees: Can submit leave requests with start/end dates and specific reasons.
+*Admins: Can moderate (Approve/Reject) company-wide requests.
+*Interactive Analytics: Data-driven dashboard visualizing leave distributions and monthly request trends.
+*Advanced Frontend Logic: Features a client-side API caching layer, input sanitization for XSS prevention, and a modular utility system.
+*Responsive Design: A sleek, indigo-themed interface that adapts perfectly to mobile, tablet, and desktop viewports.
 
 🛠️ Technologies Used
 -
