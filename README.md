@@ -79,7 +79,7 @@ Open employee-frontend/index.html in any modern web browser.
 📖 API Reference
 -
 Method       Endpoint                Access               Description
--
+
 * POST      /api/auth/register       Public               Register a new Employee account
 * GET       /api/employees           Authenticated        List all employees
 * POST      /api/employees           Admin Only           Add a new employee
