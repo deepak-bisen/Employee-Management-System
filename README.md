@@ -32,12 +32,12 @@ This system serves as a robust solution for HR departments to manage staff recor
 
 🛠️ Technology Stack
 -------------------
-Layer               Technologies
--
-* Backend           Java 21, Spring Boot 3.5, Spring Data JPA, Spring Security
-* Database          MariaDB 11+
-* Frontend          HTML5, Tailwind CSS, JavaScript (ES6+), Chart.js
-* Build Tools       Maven, Lombok
+Layer-->             -->Technologies
+
+* Backend           -->Java 21, Spring Boot 3.5, Spring Data JPA, Spring Security
+* Database          -->MariaDB 11+
+* Frontend          -->HTML5, Tailwind CSS, JavaScript (ES6+), Chart.js
+* Build Tools       -->Maven, Lombok
 
 🚀 Getting Started
 ------------------
@@ -78,14 +78,14 @@ Open employee-frontend/index.html in any modern web browser.
 
 📖 API Reference
 -
-Method       Endpoint                Access               Description
+Method    -->   -->Endpoint     -->           -->Access      -->         -->Description
 
-* POST      /api/auth/register       Public               Register a new Employee account
-* GET       /api/employees           Authenticated        List all employees
-* POST      /api/employees           Admin Only           Add a new employee
-* PUT       /api/employees/{id}      Admin Only           Update employee details
-* POST      /api/leaves              Authenticated        Submit a leave request
-* PUT       /api/leaves/{id}/status  Admin Only           Approve/Reject a leave request
+* POST      -->/api/auth/register       -->Public               -->Register a new Employee account
+* GET       -->/api/employees           -->Authenticated        -->List all employees
+* POST      -->/api/employees           -->Admin Only           -->Add a new employee
+* PUT       -->/api/employees/{id}      -->Admin Only           -->Update employee details
+* POST      -->/api/leaves              -->Authenticated        -->Submit a leave request
+* PUT       -->/api/leaves/{id}/status  -->Admin Only           -->Approve/Reject a leave request
 
 🛡️ Security Architecture
 -
